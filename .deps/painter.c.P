@@ -1,0 +1,2 @@
+painter.c.o: painter.c helpers.h
+painter.c helpers.h :
