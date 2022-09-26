@@ -11,7 +11,7 @@
 // OLED_BUF_SIZE = 512 (INCLUDED IN HELPERS.H)
 
 // 4 * 128 = 512
-BYTE displayBuffer[OLED_BUF_SIZE];
+BYTE display_buffer[OLED_BUF_SIZE];
 
 BYTE spi_send_receive(BYTE data)
 {
@@ -65,7 +65,7 @@ void oled_put_buffer()
 	for (i = 0; i < OLED_BUF_SIZE; i++)
 	{
 		while ((SPI2STAT & 0b1000) == 0); // Wait for buffer to empty out
-		SPI2BUF = displayBuffer[i];
+		SPI2BUF = display_buffer[i];
 		while ((SPI2STAT & 0b1) == 0); // Wait for data to be received
 		junk = SPI2BUF;
 	}
@@ -74,7 +74,7 @@ void oled_put_buffer()
 void oled_update()
 {
 	char *pb;
-	pb = displayBuffer;
+	pb = display_buffer;
 	int page;
 	for (page = 0; page < OLED_MAX_PAGE; page++)
 	{
