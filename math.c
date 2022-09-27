@@ -1,5 +1,3 @@
-#define MATH_FILE
-
 #include "helpers.h"
 
 // Represent float as a integer to be able to access its bits
@@ -22,29 +20,6 @@
 #define CHEBY_2  0.0199652533154854f
 #define CHEBY_1  0.9961500530366957f
 #define CHEBY_0  0.0001205256774430f
-
-// 2x2 32-bit Float Matrix
-typedef union _matrix2x2
-{
-    float m[2][2];
-    struct
-    {
-        float _11, _12, _21, _22;
-    };
-} m2x2;
-
-// Good ol' Identity 2x2 Matrix
-const m2x2 IDENTMTRX = {1.0, 0.0, 0.0, 1.0};
-
-// 32-bit float 2D Vector
-typedef union _vec2
-{
-    float m[2];
-    struct
-    {
-        float _1, _2;
-    };
-} v2;
 
 // Transposes a 2x2 Matrix
 m2x2 transpose(m2x2 mat)

@@ -13,12 +13,12 @@
 
 #ifndef OLED_FILE
 extern BYTE display_buffer[OLED_BUF_SIZE];
-void oled_power_off();
-void init();
+#endif
+
 void oled_update();
 void oled_put_buffer();
-void delay(int);
-#endif
+void oled_power_off();
+void init();
 
 /* ==========================================
  * |             MATHEMATICS                |
@@ -32,9 +32,26 @@ void delay(int);
 #define C_PI_4  0.785398163397448309615660845819875721049292349843776455243736148076954101571552249657008706335529267f
 #define C_SQRT2 1.414213562373095048801688724209698078569671875376948073176679737990732478462107038850387534327641573f
 
-#ifndef MATH_FILE
-typedef union _matrix2x2 m2x2;
-typedef union _vec2 v2;
+// 2x2 32-bit Float Matrix
+typedef union _matrix2x2
+{
+    float m[2][2];
+    struct
+    {
+        float _11, _12, _21, _22;
+    };
+} m2x2;
+
+// 32-bit float 2D Vector
+typedef union _vec2
+{
+    float m[2];
+    struct
+    {
+        float _1, _2;
+    };
+} v2;
+
 m2x2 transpose(m2x2);
 m2x2 relfectx(m2x2);
 m2x2 relfecty(m2x2);
@@ -47,4 +64,11 @@ v2 vmulm(const m2x2, const v2);
 float abs(float);
 float sin(float);
 float cos(float);
-#endif
+
+/* ==========================================
+ * |               PAINTER                  |
+ * ==========================================
+ */
+
+void pixon(const BYTE x, const BYTE y);
+void pixoff(const BYTE x, const BYTE y);
