@@ -1,4 +1,4 @@
-#define MATHEMATICS_FILE
+#define MATH_FILE
 
 #include "helpers.h"
 
@@ -143,7 +143,7 @@ float abs(float x)
     return xint.f;
 }
 
-// Returns
+// Returns sin(x) of a given function with error of around 10^4 (not entirely tested)
 float sin(float x)
 {
     FLOAT_AS_INT(xint);
