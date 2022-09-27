@@ -70,5 +70,5 @@ float cos(float);
  * ==========================================
  */
 
-void pixon(const BYTE x, const BYTE y);
-void pixoff(const BYTE x, const BYTE y);
+void pixon(const BYTE, const BYTE);
+void pixoff(const BYTE, const BYTE);
