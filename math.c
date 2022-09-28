@@ -21,6 +21,9 @@
 #define CHEBY_1  0.9961500530366957f
 #define CHEBY_0  0.0001205256774430f
 
+// Identity 2x2 Matrix
+const m2x2 IMATRIX2 = {1.0, 0.0, 0.0, 1.0}; 
+
 // Transposes a 2x2 Matrix
 m2x2 transpose(m2x2 mat)
 {
