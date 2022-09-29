@@ -46,7 +46,8 @@ void line_low(const int x0, const int y0, const int x1, const int y1, int dx, in
     int D = (2 * dy) - dx;
     int y = y0;
 
-    for(int x = x0; x <= x1; x++) 
+    int x;
+    for(x = x0; x <= x1; x++) 
     {
         // plot(x, y)
         BYTE row = y >> 3; 
@@ -77,7 +78,8 @@ void line_high(const int x0, const int y0, const int x1, const int y1, int dx, c
     int D = (2 * dx) - dy;
     int x = x0;
 
-    for(int y = y0; y <= y1; y++) 
+    int y;
+    for(y = y0; y <= y1; y++) 
     {
         // plot(x, y)
         BYTE row = y >> 3; 
