@@ -1,4 +1,9 @@
-#pragma once
+#ifndef HELPERS
+#define HELPERS
+
+// GENERAL DEFINITIONS
+#define BYTE char
+
 
 /*
  * This header file defines functions that should be accessible from outside
@@ -9,7 +14,6 @@
  * ==========================================
  */
 #define OLED_BUF_SIZE 512
-#define BYTE char
 
 #ifndef OLED_FILE
 extern BYTE display_buffer[OLED_BUF_SIZE];
@@ -52,6 +56,8 @@ typedef union _vec2
     };
 } v2;
 
+const m2x2 IDENTMATRIX2;
+
 m2x2 transpose(m2x2);
 m2x2 relfectx(m2x2);
 m2x2 relfecty(m2x2);
@@ -72,3 +78,5 @@ float cos(float);
 
 void pixon(const BYTE, const BYTE);
 void pixoff(const BYTE, const BYTE);
+
+#endif // HELPERS
