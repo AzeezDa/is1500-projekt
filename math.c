@@ -15,14 +15,14 @@
 #define SIGN_BIT_MASK 0x80000000
 
 // Coefficients used to calculate sine
-#define CHEBY_4  0.0287138152563782f
+#define CHEBY_4 0.0287138152563782f
 #define CHEBY_3 -0.2035809070988712f
-#define CHEBY_2  0.0199652533154854f
-#define CHEBY_1  0.9961500530366957f
-#define CHEBY_0  0.0001205256774430f
+#define CHEBY_2 0.0199652533154854f
+#define CHEBY_1 0.9961500530366957f
+#define CHEBY_0 0.0001205256774430f
 
 // Identity 2x2 Matrix
-const m2x2 IMATRIX2 = {1.0, 0.0, 0.0, 1.0}; 
+const m2x2 IMATRIX2 = {1.0, 0.0, 0.0, 1.0};
 
 // Transposes a 2x2 Matrix
 m2x2 transpose(m2x2 mat)
