@@ -6,9 +6,20 @@ int main()
 {
 	init();
 
-	pixon(1, 1);
-	oled_put_buffer();
-	
+	int i;
+
+	while (1)
+	{
+		for (i = 0; i < 512; i++)
+		{
+			display_buffer[i] = rand();
+		}
+		
+		oled_put_buffer();
+
+		for (i = 0; i < 50000; i++);
+	}
+
 	for (;;)
 		;
 	return 0;

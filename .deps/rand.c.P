@@ -1,2 +1,2 @@
-rand.c.o: rand.c helpers.h
-rand.c helpers.h :
+rand.c.o: rand.c
+rand.c :
