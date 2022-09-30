@@ -7,12 +7,12 @@ void pixon(const BYTE x, const BYTE y)
     BYTE row = y >> 3; 
 
     // Multiply row by 128 (<< 7) to push it in the correct place Y position in the buffer (now at (0,Y)). Add X to push it to the correct column (X,Y)
-    BYTE buf_coord = (row << 7) + x;
+    int buf_coord = (row << 7) + x;
 
-    // We want to know which bit of that byte we want to modify, so we get the last three bits (0-7) which tell us the bit offset aka modulo 8
+    // We want to know which bit of that int we want to modify, so we get the last three bits (0-7) which tell us the bit offset aka modulo 8
     row = y & 7;
 
-    // We push a one with that many steps forward in that byte in the buffer and or it to make it 1 at the specific bit
+    // We push a one with that many steps forward in that int in the buffer and or it to make it 1 at the specific bit
     display_buffer[buf_coord] |= 1 << row;
 }
 
@@ -23,35 +23,35 @@ void pixoff(const BYTE x, const BYTE y)
     BYTE row = y >> 3; 
 
     // Multiply row by 128 (<< 7) to push it in the correct place Y position in the buffer (now at (0,Y)). Add X to push it to the correct column (X,Y)
-    BYTE buf_coord = (row << 7) + x;
+    int buf_coord = (row << 7) + x;
 
-    // We want to know which bit of that byte we want to modify, so we get the last three bits (0-7) which tell us the bit offset aka modulo 8
+    // We want to know which bit of that int we want to modify, so we get the last three bits (0-7) which tell us the bit offset aka modulo 8
     row = y & 7;
 
-    // We push a one with that many steps forward in that byte in the buffer and and it with the inverse of that byte to make it 0 at the specific bit
+    // We push a one with that many steps forward in that int in the buffer and and it with the inverse of that int to make it 0 at the specific bit
     display_buffer[buf_coord] &= ~(1 << row);
 }
 /**
  * Drawing a line using Bresenham's algorithm 
  * https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
  */
-void line_low(const BYTE x0, const BYTE y0, const BYTE x1, const BYTE y1, BYTE dx, BYTE dy) 
+void line_low(const int x0, const int y0, const int x1, const int y1, int dx, int dy) 
 {
-    BYTE yi = 1;
+    int yi = 1;
     if(dy < 0) 
     {
-        BYTE yi = -1;
+        int yi = -1;
         dy = -dy;
     }
-    BYTE D = (2 * dy) - dx;
-    BYTE y = y0;
+    int D = (2 * dy) - dx;
+    int y = y0;
 
-    BYTE x;
+    int x;
     for(x = x0; x <= x1; x++) 
     {
         // plot(x, y)
-        BYTE row = y >> 3; 
-        BYTE buf_coord = (row << 7) + x;
+        int row = y >> 3; 
+        int buf_coord = (row << 7) + x;
         row = y & 7;
         display_buffer[buf_coord] |= 1 << row;
 
@@ -67,23 +67,23 @@ void line_low(const BYTE x0, const BYTE y0, const BYTE x1, const BYTE y1, BYTE d
     }
 }
 
-void line_high(const BYTE x0, const BYTE y0, const BYTE x1, const BYTE y1, BYTE dx, const BYTE dy) 
+void line_high(const int x0, const int y0, const int x1, const int y1, int dx, const int dy) 
 {
-    BYTE xi = 1;
+    int xi = 1;
     if(dx < 0) 
     {
         xi = -1;
         dx = -dx;
     }
-    BYTE D = (2 * dx) - dy;
-    BYTE x = x0;
+    int D = (2 * dx) - dy;
+    int x = x0;
 
-    BYTE y;
+    int y;
     for(y = y0; y <= y1; y++) 
     {
         // plot(x, y)
-        BYTE row = y >> 3; 
-        BYTE buf_coord = (row << 7) + x;
+        int row = y >> 3; 
+        int buf_coord = (row << 7) + x;
         row = y & 7;
         display_buffer[buf_coord] |= 1 << row;
  
@@ -100,14 +100,14 @@ void line_high(const BYTE x0, const BYTE y0, const BYTE x1, const BYTE y1, BYTE 
 
 }
 /**
- * Draws a line between the poBYTEs (x0, y0) and (x1, y1) using Bresenham's line algorithm .
+ * Draws a line between the points (x0, y0) and (x1, y1) using Bresenham's line algorithm .
  */
-void draw_line(const BYTE x0, const BYTE y0, const BYTE x1, const BYTE y1) 
+void draw_line(const int x0, const int y0, const int x1, const int y1) 
 {
-    BYTE dx = x1 - x0;
-    BYTE dy = y1 - y0;
-    BYTE sub_y = dy > 0 ? dy : -dy;
-    BYTE sub_x = dx > 0 ? dx : -dx;
+    int dx = x1 - x0;
+    int dy = y1 - y0;
+    int sub_y = dy > 0 ? dy : -dy;
+    int sub_x = dx > 0 ? dx : -dx;
     if(sub_y < sub_x) 
     {
         if(x0 > x1) 
