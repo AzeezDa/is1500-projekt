@@ -78,9 +78,7 @@ float cos(float);
 
 void pixon(const BYTE, const BYTE);
 void pixoff(const BYTE, const BYTE);
-void draw_line(const int x0, const int y0, const int x1, const int y1);
-void line_high(const int x0, const int y0, const int x1, const int y1, int dx, const int dy); // INTERNAL
-void line_low(const int x0, const int y0, const int x1, const int y1, const int dx, int dy); // INTERNAL
+void draw_line(const BYTE x0, const BYTE y0, const BYTE x1, const BYTE y1);
 
 
 
