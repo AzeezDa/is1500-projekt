@@ -3,6 +3,7 @@
 
 // GENERAL DEFINITIONS
 #define BYTE char
+#define UBYTE unsigned char
 
 
 /*
@@ -22,7 +23,7 @@ extern BYTE display_buffer[OLED_BUF_SIZE];
 void oled_update();
 void oled_put_buffer();
 void oled_power_off();
-void init();
+void oled_init();
 
 /* ==========================================
  * |             MATHEMATICS                |
@@ -70,6 +71,7 @@ v2 vmulm(const m2x2, const v2);
 float abs(float);
 float sin(float);
 float cos(float);
+unsigned rand();
 
 /* ==========================================
  * |               PAINTER                  |
@@ -78,5 +80,59 @@ float cos(float);
 
 void pixon(const BYTE, const BYTE);
 void pixoff(const BYTE, const BYTE);
+void clear_buf();
+
+/* ==========================================
+ * |              IO_DEVICES                |
+ * ==========================================
+ */
+
+void init();
+
+// Struct that includes buttons and switches
+// The 8 bit fields: For x in 1..4: bx is for the buttons and sx are for the buttons
+// The buttons and switches fields: a nibble representing the 4 buttons and the 4 switches
+// The _all field: a byte of all 8 buttons and switches
+typedef union _inputs
+{
+    struct
+    {
+        UBYTE b1 : 1;
+        UBYTE b2 : 1;
+        UBYTE b3 : 1;
+        UBYTE b4 : 1;
+        UBYTE s1 : 1;
+        UBYTE s2 : 1;
+        UBYTE s3 : 1;
+        UBYTE s4 : 1;
+    };
+
+    struct {
+        UBYTE buttons  : 4;
+        UBYTE switches : 4;
+    };
+
+    UBYTE _all;
+} inputs;
+
+// The leds struct includes 8 bit fields each representing the LEDs on the chip
+// Each fields number is the same as the number written on the chip, i.e _1 is LD1
+typedef union _leds {
+    struct {
+        UBYTE _1 : 1;
+        UBYTE _2 : 1;
+        UBYTE _3 : 1;
+        UBYTE _4 : 1;
+        UBYTE _5 : 1;
+        UBYTE _6 : 1;
+        UBYTE _7 : 1;
+        UBYTE _8 : 1;
+    };
+    UBYTE _all;
+} leds;
+
+void bsl_init();
+inputs get_inputs();
+inline void set_leds(leds);
 
 #endif // HELPERS

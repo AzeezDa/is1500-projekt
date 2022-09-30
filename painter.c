@@ -31,3 +31,10 @@ void pixoff(const BYTE x, const BYTE y)
     // We push a one with that many steps forward in that byte in the buffer and and it with the inverse of that byte to make it 0 at the specific bit
     display_buffer[buf_coord] &= ~(1 << row);
 }
+
+// Clears the buffer by making all its values to 0
+void clear_buf() {
+    int i;
+    for (i = 0; i < OLED_BUF_SIZE; i++)
+        display_buffer[i] = 0;
+}
