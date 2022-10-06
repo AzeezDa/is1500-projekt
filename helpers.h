@@ -131,7 +131,11 @@ typedef union _leds {
     UBYTE _all;
 } leds;
 
+extern const unsigned int ticks;
+
 void bsl_init();
+void timer_init();
+void wait(unsigned int);
 inputs get_inputs();
 inline void set_leds(leds);
 
