@@ -21,9 +21,9 @@ void bsl_init()
 // Initialize timer 2 with 1 ms time out
 void timer_init()
 {
-    T2CON = 0x10; // Set prescale to 2
+    T2CON = 0x60; // Set prescale to 64
     TMR2 = 0x0;
-    PR2 = 20000;     // 80 000 000 / 2 / 1000 / 2 CC = 20000
+    PR2 = 625;     // 80 000 000 / 64 / 1000 / 2 Clock Cycles = 625
     IEC(0) |= 0x100;
     IPC(2) |= 31;
     asm volatile("ei");
@@ -32,8 +32,8 @@ void timer_init()
 
 void wait(unsigned int ms)
 {
-    unsigned int start = ticks;
-    while (ticks - start < ms);
+    unsigned int start = TICKS;
+    while (TICKS - start < ms);
     return;
 }
 

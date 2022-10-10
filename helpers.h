@@ -131,7 +131,8 @@ typedef union _leds {
     UBYTE _all;
 } leds;
 
-extern const unsigned int ticks;
+// This stores the amount of milliseconds since the chip has started, it is updated within the interrupt service routine in vectors.S
+extern volatile const unsigned int TICKS;
 
 void bsl_init();
 void timer_init();

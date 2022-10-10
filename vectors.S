@@ -2,8 +2,8 @@
 
 .section .data
 .align 4
-.global ticks
-ticks: .word
+.global TICKS
+TICKS: .word
 
 .macro movi reg, val
 	lui \reg, %hi(\val)
@@ -48,7 +48,7 @@ _isr_stub:
 	sw 	 $t1, 12($sp)
 
 	# Increment tick
-	la   $t0, ticks
+	la   $t0, TICKS
 	lw   $t1, 0($t0)
 	addi $t1, $t1, 1
 	sw   $t1, 0($t0)
