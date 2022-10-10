@@ -6,34 +6,36 @@ int main()
 {
 	init();
 
-	float x = 16, t = 0;
-	int i, j;
-	
+	int i, count = 0;
+	volatile unsigned int start, period = 500; // 500ms
+
+	// Initialises input device struct
+	leds ld = {0};
+	inputs in;
+
+	start = TICKS;
+	oled_put_buffer();
 	while (1)
 	{
-		// Draw pendulum rope
-		x = 64.0 + 20 * sin(t);
-		draw_line(64, 1, x, 25);
-		t += 0.01;
-		
-		// Pendulum ball
-		for (i = -3; i < 3; i++)
-		{
-			for (j = -3; j < 3; j++)
-				pixon(x + i, 25 + j);
+		if (TICKS - start > period) {
+			clear_buf();
+			for(i = 0; i < 32; i++)
+				pixon(count%128, i);
+			oled_put_buffer();
+			count++;
+			start = TICKS;
 		}
-		
-		oled_put_buffer();
 
-		for (i = 0; i < 512; i++)
-		{
-			display_buffer[i] = 0;
-		}
+		in = get_inputs();
+		period = 500;
+		ld._all = 0b11001100;
+		if (in.s1)
+			period = 100;
+		if (in.b1)
+			ld._all = ~ld._all;
 		
+		set_leds(ld);
 	}
-	
-
-	
 
 	for (;;)
 		;

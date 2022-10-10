@@ -131,3 +131,10 @@ void draw_line(const int x0, const int y0, const int x1, const int y1)
         }
     }
 }
+
+// Clears the buffer by making all its values to 0
+void clear_buf() {
+    int i;
+    for (i = 0; i < OLED_BUF_SIZE; i++)
+        display_buffer[i] = 0;
+}
