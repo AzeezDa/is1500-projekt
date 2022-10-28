@@ -9,10 +9,10 @@ void pixon(const BYTE x, const BYTE y)
     // Multiply row by 128 (<< 7) to push it in the correct place Y position in the buffer (now at (0,Y)). Add X to push it to the correct column (X,Y)
     int buf_coord = (row << 7) + x;
 
-    // We want to know which bit of that byte we want to modify, so we get the last three bits (0-7) which tell us the bit offset aka modulo 8
+    // We want to know which bit of that int we want to modify, so we get the last three bits (0-7) which tell us the bit offset aka modulo 8
     row = y & 7;
 
-    // We push a one with that many steps forward in that byte in the buffer and or it to make it 1 at the specific bit
+    // We push a one with that many steps forward in that int in the buffer and or it to make it 1 at the specific bit
     display_buffer[buf_coord] |= 1 << row;
 }
 
@@ -25,10 +25,10 @@ void pixoff(const BYTE x, const BYTE y)
     // Multiply row by 128 (<< 7) to push it in the correct place Y position in the buffer (now at (0,Y)). Add X to push it to the correct column (X,Y)
     int buf_coord = (row << 7) + x;
 
-    // We want to know which bit of that byte we want to modify, so we get the last three bits (0-7) which tell us the bit offset aka modulo 8
+    // We want to know which bit of that int we want to modify, so we get the last three bits (0-7) which tell us the bit offset aka modulo 8
     row = y & 7;
 
-    // We push a one with that many steps forward in that byte in the buffer and and it with the inverse of that byte to make it 0 at the specific bit
+    // We push a one with that many steps forward in that int in the buffer and and it with the inverse of that int to make it 0 at the specific bit
     display_buffer[buf_coord] &= ~(1 << row);
 }
 /**
@@ -50,7 +50,7 @@ void line_low(const int x0, const int y0, const int x1, const int y1, int dx, in
     for(x = x0; x <= x1; x++) 
     {
         // plot(x, y)
-        BYTE row = y >> 3; 
+        int row = y >> 3; 
         int buf_coord = (row << 7) + x;
         row = y & 7;
         display_buffer[buf_coord] |= 1 << row;
@@ -82,7 +82,7 @@ void line_high(const int x0, const int y0, const int x1, const int y1, int dx, c
     for(y = y0; y <= y1; y++) 
     {
         // plot(x, y)
-        BYTE row = y >> 3; 
+        int row = y >> 3; 
         int buf_coord = (row << 7) + x;
         row = y & 7;
         display_buffer[buf_coord] |= 1 << row;
@@ -130,4 +130,11 @@ void draw_line(const int x0, const int y0, const int x1, const int y1)
             line_high(x0, y0, x1, y1, dx, dy);
         }
     }
+}
+
+// Clears the buffer by making all its values to 0
+void clear_buf() {
+    int i;
+    for (i = 0; i < OLED_BUF_SIZE; i++)
+        display_buffer[i] = 0;
 }

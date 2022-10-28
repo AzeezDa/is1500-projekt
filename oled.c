@@ -111,7 +111,7 @@ void oled_power_off()
     PORTF |= 0x20;
 }
 
-void init()
+void oled_init()
 {
     /**
      * Setting up the SPI
