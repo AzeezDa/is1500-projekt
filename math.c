@@ -36,6 +36,7 @@ unsigned rand()
 
 // Identity 2x2 Matrix
 const m2x2 IMATRIX2 = {1.0, 0.0, 0.0, 1.0};
+const v2 ZERO = {0.0, 0.0};
 
 // Transposes a 2x2 Matrix
 m2x2 transpose(m2x2 mat)
@@ -186,4 +187,25 @@ float sin(float x)
 float cos(float x)
 {
     return sin(C_PI_2 - x);
+}
+
+// Returns 1 if r1 and r2 overlap else 0
+UBYTE overlaps(const rect r1, const rect r2) {
+    return  r1.x < r2.x + r2.w &&
+    r1.x + r1.w > r2.x &&
+    r1.y < r2.y + r2.h &&
+    r1.h + r1.y > r2.y;
+}
+
+// Translates a rectangles origin by a given vector
+void translate(rect* const r, const v2 v)
+{   
+    r->x += v._1;
+    r->y += v._2;
+}
+
+v2 center(const rect r)
+{
+    v2 c = {r.x + r.w/2, r.y + r.h/2};
+    return c;
 }

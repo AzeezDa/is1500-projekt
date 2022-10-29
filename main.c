@@ -6,7 +6,14 @@ int main()
 {
 	init();
 
-	int i, count = 0;
+	int i;
+	rect r = {50.0, 12.0, 8.0, 8.0},
+		 wall1 = {100.0, 5.0, 20.0, 22.0},
+		 wall2 = {2.0, 5.0, 20.0, 22.0};
+	v2 dir = {1.0, 0.0};
+
+	m2x2 rot = {cos(C_PI_4), sin(C_PI_4), -sin(C_PI_4), cos(C_PI_4)};
+
 	volatile unsigned int start, period = 500; // 500ms
 
 	// Initialises input device struct
@@ -19,10 +26,15 @@ int main()
 	{
 		if (TICKS - start > period) {
 			clear_buf();
-			for(i = 0; i < 32; i++)
-				pixon(count%128, i);
+			draw_rectangle_m(r, rot, center(r));
+			draw_rectangle_m(wall1, rot, center(wall1));
+			draw_rectangle_m(wall2, rot, center(wall2));
 			oled_put_buffer();
-			count++;
+			translate(&r, dir);
+			if (overlaps(r, wall1) | overlaps(r, wall2)) {
+				dir._1 *= -1.0;
+				translate(&r, dir);
+			}
 			start = TICKS;
 		}
 

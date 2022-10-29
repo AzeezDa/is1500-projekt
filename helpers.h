@@ -57,7 +57,21 @@ typedef union _vec2
     };
 } v2;
 
-const m2x2 IDENTMATRIX2;
+// A rectangle represented by an origin (upper left corner) with width and height
+typedef union _rect
+{
+    struct
+    {
+        v2 origin;
+        v2 size;
+    };
+    struct
+    {
+        float x, y, w, h;
+    };
+} rect;
+
+const m2x2 IMATRIX2;
 
 m2x2 transpose(m2x2);
 m2x2 relfectx(m2x2);
@@ -72,6 +86,9 @@ float abs(float);
 float sin(float);
 float cos(float);
 unsigned rand();
+UBYTE overlaps(const rect, const rect);
+void translate(rect* const, const v2);
+v2 center(const rect);
 
 /* ==========================================
  * |               PAINTER                  |
@@ -82,6 +99,8 @@ void pixon(const BYTE, const BYTE);
 void pixoff(const BYTE, const BYTE);
 void draw_line(const int x0, const int y0, const int x1, const int y1);
 void clear_buf();
+void draw_rectangle(const rect);
+void draw_rectangle_m(const rect, const m2x2, const v2);
 
 /* ==========================================
  * |              IO_DEVICES                |
