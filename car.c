@@ -1,7 +1,5 @@
 #include "helpers.h"
 
-UBYTE display_buffer[512];
-
 typedef struct Car {
     UBYTE car_arr[14];
 } Car;
@@ -12,31 +10,26 @@ void draw_car(const UBYTE x, const UBYTE y)
     // Check validity of coordinates (Could be made faster?)
     if(x < 0 || x > 114 || y < 0 || y > 31) return;
     UBYTE bit = 1;
-    for(int i = 0; i < 14; i++) 
+    int i, j;
+    for(i = 0; i < 14; i++) 
     {
-        for(int j = 0; j < 8; j++) 
+        UBYTE col = car.car_arr[i];
+        for(j = 0; j < 8; j++) 
         {
-            int row = (j + y) >> 3; 
-            int buf_coord = (row << 7) + i + x;  
-            row = (y + j) & 7;
+            if (col & 1)
+                pixon(x + i, y + j);
+            else
+                pixoff(x + i, y + j);
+            
+            col = col >> 1;
+            
+            // int row = (j + y) >> 3; 
+            // int buf_coord = (row << 7) + i + x;  
+            // row = (y + j) & 7;
 
-            display_buffer[buf_coord] |= (1 << row) & car.car_arr[i];
-            bit = bit >> 1;
+            // display_buffer[buf_coord] |= (1 << row) & car.car_arr[i];
+            // bit = bit >> 1;
         } 
         bit = 1;
-        printf("\n");
     }
-}
-
-int main(void) 
-{
-    draw_car(0, 0);
-
-    printf("\n");
-    for(int i = 0; i < 512; i++) 
-    {
-        printf("0x%x, ", display_buffer[i]);
-    }
-
-    return 0;
 }
