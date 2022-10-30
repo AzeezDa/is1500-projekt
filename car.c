@@ -1,9 +1,19 @@
 #include "helpers.h"
 
-typedef struct Car {
+typedef struct _Car {
     UBYTE car_arr[14];
+    UBYTE x, y, x_speed;
 } Car;
 Car car = {{0x70, 0xc8, 0xe8, 0xfe, 0x79, 0x49, 0x4b, 0x4b, 0x49, 0x79, 0xfe, 0xe8, 0xc8, 0x70}};
+
+// Initializes car position, velocity and draws it
+void init_car() 
+{
+    car.x = 60;
+    car.y = 23;
+    car.x_speed = 1;
+    draw_car(car.x, car.y);
+}
 
 void draw_car(const UBYTE x, const UBYTE y) 
 {
@@ -32,4 +42,17 @@ void draw_car(const UBYTE x, const UBYTE y)
         } 
         bit = 1;
     }
+}
+
+
+// Car turns left based on turning speed
+void turn_left() 
+{
+    draw_car(car.x - car.x_speed, car.y);
+}
+
+// Car turns right based on turning speed
+void turn_right() 
+{
+    draw_car(car.x + car.x_speed, car.y);
 }

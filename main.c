@@ -17,6 +17,14 @@ int main()
 			oled_put_buffer();
 			if (x > 32)
 				x = 0;
+
+
+			// Car movement
+			inputs in = get_inputs();
+			if (in.b1)
+				turn_left();
+			if(in.b2) 
+				turn_right();
 		}
 	}
 

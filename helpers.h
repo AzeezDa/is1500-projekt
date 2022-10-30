@@ -141,6 +141,13 @@ void wait(unsigned int);
 inputs get_inputs();
 inline void set_leds(leds);
 
+/* ==========================================
+ * |              ANIMATION                 |
+ * ==========================================
+ */
+
 void draw_car(const UBYTE, const UBYTE);
+void turn_left();
+void turn_right();
 
 #endif // HELPERS
