@@ -1,8 +1,13 @@
 #include "helpers.h"
 
+
+
 // Given a x, y coordinate, set that pixel ON on the board
 void pixon(const BYTE x, const BYTE y)
 {
+    if (x < SCREEN_X_MIN || x > SCREEN_X_MAX || y < SCREEN_Y_MIN|| y > SCREEN_Y_MAX)
+        return;
+
     // Determine which row the bit is (there are 8 bits in each row so we divide by 8)
     BYTE row = y >> 3; 
 
@@ -19,6 +24,9 @@ void pixon(const BYTE x, const BYTE y)
 // Given a x, y coordinate, set that pixel OFF on the board
 void pixoff(const BYTE x, const BYTE y)
 {
+    if (x < SCREEN_X_MIN || x > SCREEN_X_MAX || y < SCREEN_Y_MIN || y > SCREEN_Y_MAX)
+        return;
+
     // Determine which row the bit is (there are 8 bits in each row so we divide by 8)
     BYTE row = y >> 3; 
 
@@ -49,12 +57,14 @@ void line_low(const int x0, const int y0, const int x1, const int y1, int dx, in
     int x;
     for(x = x0; x <= x1; x++) 
     {
-        // plot(x, y)
-        int row = y >> 3; 
-        int buf_coord = (row << 7) + x;
-        row = y & 7;
-        display_buffer[buf_coord] |= 1 << row;
-
+        if (x >= SCREEN_X_MIN && x <= SCREEN_X_MAX && y >= SCREEN_Y_MIN && y <= SCREEN_Y_MAX)
+        {
+            // plot(x, y)
+            int row = y >> 3; 
+            int buf_coord = (row << 7) + x;
+            row = y & 7;
+            display_buffer[buf_coord] |= 1 << row;
+        }
         if(D > 0) 
         {
             y += yi;
@@ -81,12 +91,15 @@ void line_high(const int x0, const int y0, const int x1, const int y1, int dx, c
     int y;
     for(y = y0; y <= y1; y++) 
     {
-        // plot(x, y)
-        int row = y >> 3; 
-        int buf_coord = (row << 7) + x;
-        row = y & 7;
-        display_buffer[buf_coord] |= 1 << row;
- 
+        if (x >= SCREEN_X_MIN && x <= SCREEN_X_MAX && y >= SCREEN_Y_MIN && y <= SCREEN_Y_MAX)
+        {
+            // plot(x, y)
+            int row = y >> 3; 
+            int buf_coord = (row << 7) + x;
+            row = y & 7;
+            display_buffer[buf_coord] |= 1 << row;
+        }
+
         if(D > 0) 
         {
             x += xi;
@@ -150,18 +163,18 @@ void draw_rectangle(const rect r)
 // Draws the given rectangle transformed by a given matrix at the specified origin
 void draw_rectangle_m(const rect r, const m2x2 m, const v2 o)
 {
-    v2 ul = {r.x - o._1,        r.y - o._2},
-       ur = {r.x + r.w - o._1,  r.y - o._2},
-       bl = {r.x - o._1,        r.y + r.h - o._2},
-       br = {r.x + r.w - o._1,  r.y + r.h - o._2};
+    v2 ul = {r.x - o._1,       r.y - o._2};
+    v2 ur = {r.x + r.w - o._1, r.y - o._2};
+    v2 bl = {r.x - o._1,       r.y + r.h - o._2};
+    v2 br = {r.x + r.w - o._1, r.y + r.h - o._2};
 
     ul = vmulm(m, ul);
     ur = vmulm(m, ur);
     bl = vmulm(m, bl);
     br = vmulm(m, br);
 
-    draw_line(ul._1 + o._1, ul._2 + o._2, ur._1 + o._1, ur._2 + o._2); // Top
-    draw_line(bl._1 + o._1, bl._2 + o._2, br._1 + o._1, br._2 + o._2); // Bottom
-    draw_line(ul._1 + o._1, ul._2 + o._2, bl._1 + o._1, bl._2 + o._2); // Left
-    draw_line(ur._1 + o._1, ur._2 + o._2, br._1 + o._1, br._2 + o._2); // Right
+    draw_line(ul._1 + o._1, ul._2 + o._2, ur._1 + o._1, ur._2 + o._2);
+    draw_line(bl._1 + o._1, bl._2 + o._2, br._1 + o._1, br._2 + o._2);
+    draw_line(ul._1 + o._1, ul._2 + o._2, bl._1 + o._1, bl._2 + o._2);
+    draw_line(ur._1 + o._1, ur._2 + o._2, br._1 + o._1, br._2 + o._2);
 }

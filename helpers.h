@@ -14,6 +14,11 @@
  * |             OLED HELPERS               |
  * ==========================================
  */
+#define SCREEN_X_MIN 0
+#define SCREEN_X_MAX 127
+#define SCREEN_Y_MIN 0
+#define SCREEN_Y_MAX 31
+
 #define OLED_BUF_SIZE 512
 
 #ifndef OLED_FILE
@@ -72,12 +77,14 @@ typedef union _rect
 } rect;
 
 const m2x2 IMATRIX2;
+const v2 VZERO;
 
 m2x2 transpose(m2x2);
 m2x2 relfectx(m2x2);
 m2x2 relfecty(m2x2);
 m2x2 mmul(const m2x2, const m2x2);
 m2x2 mscale(m2x2, const float);
+m2x2 get_rot_mat(const float);
 v2 vscale(v2, const float);
 float sqrt(float);
 float norm(const v2);

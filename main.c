@@ -12,7 +12,7 @@ int main()
 		 wall2 = {2.0, 5.0, 20.0, 22.0};
 	v2 dir = {1.0, 0.0};
 
-	m2x2 rot = {cos(C_PI_4), sin(C_PI_4), -sin(C_PI_4), cos(C_PI_4)};
+	m2x2 rot = get_rot_mat(0.1);
 
 	volatile unsigned int start, period = 500; // 500ms
 

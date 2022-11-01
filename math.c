@@ -36,7 +36,7 @@ unsigned rand()
 
 // Identity 2x2 Matrix
 const m2x2 IMATRIX2 = {1.0, 0.0, 0.0, 1.0};
-const v2 ZERO = {0.0, 0.0};
+const v2 VZERO = {0.0, 0.0};
 
 // Transposes a 2x2 Matrix
 m2x2 transpose(m2x2 mat)
@@ -79,6 +79,17 @@ m2x2 mscale(m2x2 m, const float s)
     m._12 *= s;
     m._21 *= s;
     m._22 *= s;
+    return m;
+}
+
+m2x2 get_rot_mat(const float t)
+{
+    float c = cos(t), 
+          s = sin(t);
+
+    m2x2 m = {c, s, 
+             -s, c};
+             
     return m;
 }
 
