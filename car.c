@@ -1,25 +1,23 @@
 #include "helpers.h"
 
-typedef struct _Car {
+typedef struct Car {
     UBYTE car_arr[14];
-    UBYTE x, y, x_speed;
+    v2 pos;
+    float turn_speed;
 } Car;
 Car car = {{0x70, 0xc8, 0xe8, 0xfe, 0x79, 0x49, 0x4b, 0x4b, 0x49, 0x79, 0xfe, 0xe8, 0xc8, 0x70}};
 
-// Initializes car position, velocity and draws it
 void init_car() 
 {
-    car.x = 60;
-    car.y = 23;
-    car.x_speed = 1;
-    draw_car(car.x, car.y);
+    car.pos._1 = 60;
+    car.pos._2 = 23;
+    car.turn_speed = 0.001f;
 }
 
-void draw_car(const UBYTE x, const UBYTE y) 
+void draw_car() 
 {
     // Check validity of coordinates (Could be made faster?)
-    if(x < 0 || x > 114 || y < 0 || y > 31) return;
-    UBYTE bit = 1;
+    if(car.pos._1  < 0 || car.pos._1  > 114 || car.pos._2 < 0 || car.pos._2 > 31) return;
     int i, j;
     for(i = 0; i < 14; i++) 
     {
@@ -27,32 +25,30 @@ void draw_car(const UBYTE x, const UBYTE y)
         for(j = 0; j < 8; j++) 
         {
             if (col & 1)
-                pixon(x + i, y + j);
+                pixon(car.pos._1 + i, car.pos._2 + j);
             else
-                pixoff(x + i, y + j);
+                pixoff(car.pos._1  + i, car.pos._2 + j);
             
             col = col >> 1;
-            
-            // int row = (j + y) >> 3; 
-            // int buf_coord = (row << 7) + i + x;  
-            // row = (y + j) & 7;
-
-            // display_buffer[buf_coord] |= (1 << row) & car.car_arr[i];
-            // bit = bit >> 1;
         } 
-        bit = 1;
     }
 }
 
-
-// Car turns left based on turning speed
-void turn_left() 
-{
-    draw_car(car.x - car.x_speed, car.y);
-}
-
-// Car turns right based on turning speed
 void turn_right() 
 {
-    draw_car(car.x + car.x_speed, car.y);
+    float new_pos = car.pos._1 + car.turn_speed;
+    if(new_pos > 113) {
+        car.pos._1 = 113;
+        return;
+    }
+    car.pos._1 = new_pos;
+}
+void turn_left() 
+{
+    float new_pos = car.pos._1 - car.turn_speed;    
+    if(new_pos < 0) {
+        car.pos._1 = 0;
+        return;
+    }
+    car.pos._1 = new_pos;
 }

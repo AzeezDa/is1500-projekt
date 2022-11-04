@@ -146,7 +146,7 @@ inline void set_leds(leds);
  * ==========================================
  */
 
-void draw_car(const UBYTE, const UBYTE);
+void draw_car();
 void turn_left();
 void turn_right();
 
