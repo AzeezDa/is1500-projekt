@@ -145,7 +145,8 @@ inline void set_leds(leds);
  * |              ANIMATION                 |
  * ==========================================
  */
-
+void init_splash();
+void draw_menu();
 void draw_car();
 void turn_left();
 void turn_right();
