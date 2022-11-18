@@ -104,7 +104,7 @@ v2 center(const rect);
 
 void pixon(const BYTE, const BYTE);
 void pixoff(const BYTE, const BYTE);
-void draw_line(const int x0, const int y0, const int x1, const int y1);
+void draw_line(int x0, int y0, const int x1, const int y1);
 void clear_buf();
 void draw_rectangle(const rect);
 void draw_rectangle_m(const rect, const m2x2, const v2);
