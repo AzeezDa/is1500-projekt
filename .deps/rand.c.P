@@ -1,2 +1,0 @@
-rand.c.o: rand.c
-rand.c :

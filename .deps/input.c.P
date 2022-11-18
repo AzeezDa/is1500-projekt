@@ -1,2 +1,0 @@
-input.c.o: input.c /opt/mcb32tools/include/pic32mx.h helpers.h
-input.c /opt/mcb32tools/include/pic32mx.h helpers.h :

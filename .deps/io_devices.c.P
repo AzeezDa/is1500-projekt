@@ -1,2 +1,0 @@
-io_devices.c.o: io_devices.c /opt/mcb32tools/include/pic32mx.h helpers.h
-io_devices.c /opt/mcb32tools/include/pic32mx.h helpers.h :

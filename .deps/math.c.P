@@ -1,2 +1,0 @@
-math.c.o: math.c helpers.h
-math.c helpers.h :
