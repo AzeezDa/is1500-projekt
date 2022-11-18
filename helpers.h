@@ -14,6 +14,11 @@
  * |             OLED HELPERS               |
  * ==========================================
  */
+#define SCREEN_X_MIN 0
+#define SCREEN_X_MAX 127
+#define SCREEN_Y_MIN 0
+#define SCREEN_Y_MAX 31
+
 #define OLED_BUF_SIZE 512
 
 #ifndef OLED_FILE
@@ -57,13 +62,29 @@ typedef union _vec2
     };
 } v2;
 
-const m2x2 IDENTMATRIX2;
+// A rectangle represented by an origin (upper left corner) with width and height
+typedef union _rect
+{
+    struct
+    {
+        v2 origin;
+        v2 size;
+    };
+    struct
+    {
+        float x, y, w, h;
+    };
+} rect;
+
+const m2x2 IMATRIX2;
+const v2 VZERO;
 
 m2x2 transpose(m2x2);
 m2x2 relfectx(m2x2);
 m2x2 relfecty(m2x2);
 m2x2 mmul(const m2x2, const m2x2);
 m2x2 mscale(m2x2, const float);
+m2x2 get_rot_mat(const float);
 v2 vscale(v2, const float);
 float sqrt(float);
 float norm(const v2);
@@ -72,6 +93,9 @@ float abs(float);
 float sin(float);
 float cos(float);
 unsigned rand();
+UBYTE overlaps(const rect, const rect);
+void translate(rect* const, const v2);
+v2 center(const rect);
 
 /* ==========================================
  * |               PAINTER                  |
@@ -80,8 +104,10 @@ unsigned rand();
 
 void pixon(const BYTE, const BYTE);
 void pixoff(const BYTE, const BYTE);
-void draw_line(const int x0, const int y0, const int x1, const int y1);
+void draw_line(int x0, int y0, const int x1, const int y1);
 void clear_buf();
+void draw_rectangle(const rect);
+void draw_rectangle_m(const rect, const m2x2, const v2);
 
 /* ==========================================
  * |              IO_DEVICES                |

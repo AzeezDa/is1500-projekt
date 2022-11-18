@@ -3,8 +3,11 @@
 // Given a x, y coordinate, set that pixel ON on the board
 void pixon(const BYTE x, const BYTE y)
 {
+    if (x < SCREEN_X_MIN || x > SCREEN_X_MAX || y < SCREEN_Y_MIN || y > SCREEN_Y_MAX)
+        return;
+
     // Determine which row the bit is (there are 8 bits in each row so we divide by 8)
-    BYTE row = y >> 3; 
+    BYTE row = y >> 3;
 
     // Multiply row by 128 (<< 7) to push it in the correct place Y position in the buffer (now at (0,Y)). Add X to push it to the correct column (X,Y)
     int buf_coord = (row << 7) + x;
@@ -19,8 +22,11 @@ void pixon(const BYTE x, const BYTE y)
 // Given a x, y coordinate, set that pixel OFF on the board
 void pixoff(const BYTE x, const BYTE y)
 {
+    if (x < SCREEN_X_MIN || x > SCREEN_X_MAX || y < SCREEN_Y_MIN || y > SCREEN_Y_MAX)
+        return;
+
     // Determine which row the bit is (there are 8 bits in each row so we divide by 8)
-    BYTE row = y >> 3; 
+    BYTE row = y >> 3;
 
     // Multiply row by 128 (<< 7) to push it in the correct place Y position in the buffer (now at (0,Y)). Add X to push it to the correct column (X,Y)
     int buf_coord = (row << 7) + x;
@@ -31,110 +37,76 @@ void pixoff(const BYTE x, const BYTE y)
     // We push a one with that many steps forward in that int in the buffer and and it with the inverse of that int to make it 0 at the specific bit
     display_buffer[buf_coord] &= ~(1 << row);
 }
+
 /**
- * Drawing a line using Bresenham's algorithm 
- * https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
+ * Draws a line between the points (x0, y0) and (x1, y1) using Bresenham's line algorithm.
  */
-void line_low(const int x0, const int y0, const int x1, const int y1, int dx, int dy) 
+void draw_line(int x0, int y0, const int x1, const int y1)
 {
-    int yi = 1;
-    if(dy < 0) 
-    {
-        int yi = -1;
-        dy = -dy;
-    }
-    int D = (2 * dy) - dx;
-    int y = y0;
+    int dx = x1 - x0,
+        dy = y1 - y0,
+        sx = x0 < x1 ? 1 : -1,
+        sy = y0 < y1 ? 1 : -1;
+    dx = dx > 0 ? dx : -dx;
+    dy = dy > 0 ? -dy : dy;
+    int error = dx + dy,
+        e2;
 
-    int x;
-    for(x = x0; x <= x1; x++) 
+    while (1)
     {
-        // plot(x, y)
-        int row = y >> 3; 
-        int buf_coord = (row << 7) + x;
-        row = y & 7;
-        display_buffer[buf_coord] |= 1 << row;
+        pixon(x0, y0);
+        if (x0 == x1 && y0 == y1)
+            break;
 
-        if(D > 0) 
+        e2 = 2 * error;
+        if (e2 >= dy)
         {
-            y += yi;
-            D += 2 * (dy - dx);
+            if (x0 == x1)
+                break;
+            error = error + dy;
+            x0 = x0 + sx;
         }
-        else 
+        if (e2 <= dx)
         {
-            D += 2 * dy;
-        }
-    }
-}
-
-void line_high(const int x0, const int y0, const int x1, const int y1, int dx, const int dy) 
-{
-    int xi = 1;
-    if(dx < 0) 
-    {
-        xi = -1;
-        dx = -dx;
-    }
-    int D = (2 * dx) - dy;
-    int x = x0;
-
-    int y;
-    for(y = y0; y <= y1; y++) 
-    {
-        // plot(x, y)
-        int row = y >> 3; 
-        int buf_coord = (row << 7) + x;
-        row = y & 7;
-        display_buffer[buf_coord] |= 1 << row;
- 
-        if(D > 0) 
-        {
-            x += xi;
-            D += 2 * (dx - dy);
-        }
-        else 
-        {
-            D += 2*dx;
-        }
-    }
-
-}
-/**
- * Draws a line between the points (x0, y0) and (x1, y1) using Bresenham's line algorithm .
- */
-void draw_line(const int x0, const int y0, const int x1, const int y1) 
-{
-    int dx = x1 - x0;
-    int dy = y1 - y0;
-    int sub_y = dy > 0 ? dy : -dy;
-    int sub_x = dx > 0 ? dx : -dx;
-    if(sub_y < sub_x) 
-    {
-        if(x0 > x1) 
-        {
-            line_low(x1, y1, x0, y0, dx, dy);
-        }
-        else 
-        {
-            line_low(x0, y0, x1, y1, dx, dy);
-        }
-    } 
-    else 
-    {
-        if(y0 > y1) 
-        {
-            line_high(x1, y1, x0, y0, dx, dy);
-        } 
-        else 
-        {
-            line_high(x0, y0, x1, y1, dx, dy);
+            if (y0 == y1)
+                break;
+            error = error + dx;
+            y0 = y0 + sy;
         }
     }
 }
 
 // Clears the buffer by making all its values to 0
-void clear_buf() {
+void clear_buf()
+{
     int i;
     for (i = 0; i < OLED_BUF_SIZE; i++)
         display_buffer[i] = 0;
+}
+
+void draw_rectangle(const rect r)
+{
+    draw_line(r.x, r.y, r.x + r.w, r.y);             // Top
+    draw_line(r.x, r.y + r.h, r.x + r.w, r.y + r.h); // Bottom
+    draw_line(r.x, r.y, r.x, r.y + r.h);             // Left
+    draw_line(r.x + r.w, r.y, r.x + r.w, r.y + r.h); // Right
+}
+
+// Draws the given rectangle transformed by a given matrix at the specified origin
+void draw_rectangle_m(const rect r, const m2x2 m, const v2 o)
+{
+    v2 ul = {r.x - o._1, r.y - o._2};
+    v2 ur = {r.x + r.w - o._1, r.y - o._2};
+    v2 bl = {r.x - o._1, r.y + r.h - o._2};
+    v2 br = {r.x + r.w - o._1, r.y + r.h - o._2};
+
+    ul = vmulm(m, ul);
+    ur = vmulm(m, ur);
+    bl = vmulm(m, bl);
+    br = vmulm(m, br);
+
+    draw_line(ul._1 + o._1, ul._2 + o._2, ur._1 + o._1, ur._2 + o._2);
+    draw_line(bl._1 + o._1, bl._2 + o._2, br._1 + o._1, br._2 + o._2);
+    draw_line(ul._1 + o._1, ul._2 + o._2, bl._1 + o._1, bl._2 + o._2);
+    draw_line(ur._1 + o._1, ur._2 + o._2, br._1 + o._1, br._2 + o._2);
 }
