@@ -174,7 +174,18 @@ inline void set_leds(leds);
 void init_splash();
 void draw_menu();
 void draw_car();
+void draw();
 void turn_left();
 void turn_right();
+
+/* ==========================================
+ * |                 FRAMES                 |
+ * ==========================================
+ */
+extern Texture *frame1;
+extern Texture *frame2;
+extern Texture *frame3;
+extern Texture *frame3_l;
+extern Texture *frame3_r;
 
 #endif // HELPERS
