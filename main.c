@@ -7,24 +7,39 @@ int main()
     init();
     init_car();
 
-    int x = 1, start, framestart = TICKS, rups = 0;
-    inputs i;
-    leds ld = {0};
+    int start = TICKS;
 
+    inputs i;
 
     while (1)
     {    
+        // DRAW ROUTINE
         if (TICKS - start > 33) 
         {
             start = TICKS;
             clear_buf();
-
-            //draw_car();
+            draw_car();
             update_road();
             draw_road();
 
             oled_put_buffer();
         }
+
+
+        i = get_inputs();
+
+        if (fabs(current_curve._1) > 0.2) {
+            if (current_curve._1 > 0.0)
+                turn_left(car.turn_speed * current_curve._1);
+            if (current_curve._1 < 0.0)
+                turn_right(-car.turn_speed * current_curve._1);
+        }
+
+        if (i.b4)
+            turn_left(car.turn_speed);
+        if (i.b3)
+            turn_right(car.turn_speed);
+        
     }
     
     

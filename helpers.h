@@ -1,6 +1,8 @@
 #ifndef HELPERS
 #define HELPERS
 
+void *stdin, *stdout, *stderr;
+
 // GENERAL DEFINITIONS
 #define BYTE char
 #define UBYTE unsigned char
@@ -20,6 +22,8 @@
 #define SCREEN_Y_MAX 31
 
 #define RAND_MAX 0xFFFFFFFF
+
+#define DT 0.03f
 
 #define OLED_BUF_SIZE 512
 
@@ -101,10 +105,9 @@ v2 vscale(v2, const float);
 float sqrt(float);
 float norm(const v2);
 v2 vmulm(const m2x2, const v2);
-float abs(float);
+float fabs(float);
 float sin(float);
 float cos(float);
-unsigned rand();
 UBYTE overlaps(const rect, const rect);
 void translate(rect* const, const v2);
 v2 center(const rect);
@@ -186,7 +189,17 @@ inline void set_leds(leds);
 void init_splash();
 void draw_menu();
 void draw_car();
-void turn_left();
-void turn_right();
+void turn_left(const float);
+void turn_right(const float);
+
+typedef struct Car {
+    UBYTE car_arr[14];
+    v2 pos;
+    float turn_speed;
+} Car;
+
+extern v2 current_curve;
+extern float road_curve;
+extern Car car;
 
 #endif // HELPERS

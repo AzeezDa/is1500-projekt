@@ -1,10 +1,6 @@
 #include "helpers.h"
 
-typedef struct Car {
-    UBYTE car_arr[14];
-    v2 pos;
-    float turn_speed;
-} Car;
+
 Car car = {{0x70, 0xc8, 0xe8, 0xfe, 0x79, 0x49, 0x4b, 0x4b, 0x49, 0x79, 0xfe, 0xe8, 0xc8, 0x70}};
 
 void init_car() 
@@ -34,18 +30,18 @@ void draw_car()
     }
 }
 
-void turn_right() 
+void turn_right(const float speed) 
 {
-    float new_pos = car.pos._1 + car.turn_speed;
+    float new_pos = car.pos._1 + speed;
     if(new_pos > 113) {
         car.pos._1 = 113;
         return;
     }
     car.pos._1 = new_pos;
 }
-void turn_left() 
+void turn_left(const float speed) 
 {
-    float new_pos = car.pos._1 - car.turn_speed;    
+    float new_pos = car.pos._1 - speed;    
     if(new_pos < 0) {
         car.pos._1 = 0;
         return;
