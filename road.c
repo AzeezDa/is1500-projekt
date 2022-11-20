@@ -3,15 +3,17 @@
 
 v2 current_curve = {0.0, 200.0};
 float road_curve = 0.0;
-leds l = {0};
-const float PERSP[8] = {0.3, 
-                        0.3 + 4.0 / (float)SCREEN_Y_MAX, 
-                        0.3 + 8.0 / (float)SCREEN_Y_MAX,
-                        0.3 + 12.0 / (float)SCREEN_Y_MAX,
-                        0.3 + 16.0 / (float)SCREEN_Y_MAX,
-                        0.3 + 20.0 / (float)SCREEN_Y_MAX,
-                        0.3 + 24.0 / (float)SCREEN_Y_MAX,
-                        0.3 + 28.0 / (float)SCREEN_Y_MAX};
+
+#define PERSPECTIVE_CONSTANT 0.3
+
+const float PERSP[8] = {PERSPECTIVE_CONSTANT, 
+                        PERSPECTIVE_CONSTANT + 0.125, 
+                        PERSPECTIVE_CONSTANT + 0.25,
+                        PERSPECTIVE_CONSTANT + 0.375,
+                        PERSPECTIVE_CONSTANT + 0.5,
+                        PERSPECTIVE_CONSTANT + 0.625,
+                        PERSPECTIVE_CONSTANT + 0.75,
+                        PERSPECTIVE_CONSTANT + 0.875};
 
 void update_road()
 {   
@@ -41,10 +43,13 @@ void draw_road()
         int center0 = mid0 * SCREEN_X_MAX;
         int center1 = mid1 * SCREEN_X_MAX;
         
-        draw_line(center0 - road_width * PERSP[i], j, 
-                  center1 - road_width * PERSP[i+1], j + 4);
-        draw_line(center0 + road_width * PERSP[i], j, 
-                  center1 + road_width * PERSP[i+1], j + 4);
+        int dx0 = road_width * PERSP[i],
+            dx1 = road_width * PERSP[i+1];
+
+        draw_line(center0 - dx0, j, 
+                  center1 - dx1, j + 4);
+        draw_line(center0 + dx0, j, 
+                  center1 + dx1, j + 4);
     }
     
 }

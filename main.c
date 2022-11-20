@@ -13,7 +13,7 @@ int main()
 
     while (1)
     {    
-        // DRAW ROUTINE
+        // FIXED TIME UPDATE ROUTINE
         if (TICKS - start > 33) 
         {
             start = TICKS;
