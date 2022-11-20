@@ -212,12 +212,13 @@ void draw_menu();
 void turn_left(const float);
 void turn_right(const float);
 void draw(v2, const Texture*);
+void update_npc();
 
 typedef struct _npc_car 
 {
     v2 pos;
-    float distance_in_road;
     float speed;
+    BYTE lane;
     Texture *texture;
 } npc_car;
 
@@ -232,7 +233,8 @@ typedef struct _player_car
 extern v2 current_curve;
 extern float road_curve;
 extern Car car;
-
+extern const float PERSP[8];
+extern npc_car npc;
 
 
 #endif // HELPERS

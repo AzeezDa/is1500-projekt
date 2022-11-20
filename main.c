@@ -5,7 +5,8 @@
 int main()
 {
     init();
-    init_car();
+    init_player();
+    init_cars();
 
     int start = TICKS;
 
@@ -19,6 +20,7 @@ int main()
             start = TICKS;
             clear_buf();
             draw(car.pos, car.texture);
+            draw(npc.pos, npc.texture);
             update_road();
             draw_road();
 
@@ -28,12 +30,14 @@ int main()
 
         i = get_inputs();
 
-        if (fabs(current_curve._1) > 0.2) {
+        if (fabs(current_curve._1) > 0.1) {
             if (current_curve._1 > 0.0)
                 turn_left(car.turn_speed * current_curve._1);
             if (current_curve._1 < 0.0)
                 turn_right(-car.turn_speed * current_curve._1);
         }
+
+        update_npc();
 
         if (i.b4)
             turn_left(car.turn_speed);
