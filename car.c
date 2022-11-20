@@ -1,46 +1,32 @@
 #include "helpers.h"
 
-Car car = {{0x70, 0xc8, 0xe8, 0xfe, 0x79, 0x49, 0x4b, 0x4b, 0x49, 0x79, 0xfe, 0xe8, 0xc8, 0x70}};
-
-void init_car() 
+typedef struct _npc_car 
 {
-    car.pos._1 = 60;
-    car.pos._2 = 23;
-    car.turn_speed = 0.001f;
-}
+    Texture *frame1;
+    Texture *frame2;
+    Texture *frame3;
+    Texture *frame3_l;
+    Texture *frame3_r;
+    v2 pos;
+    float speed;
+} npc_car;
+v2 pos = {0.0, 0.0};
+float speed = 0;
+npc_car npc = {frame1, frame2, frame3, frame3_l, frame3_r, pos, speed};
 
-void draw_car() 
+void draw_npc() 
 {
-    // Check validity of coordinates (Could be made faster?)
-    if(car.pos._1  < 0 || car.pos._1  > 114 || car.pos._2 < 0 || car.pos._2 > 31) return;
-    int i, j;
-    for(i = 0; i < 14; i++) 
-    {
-        UBYTE col = car.car_arr[i];
-        for(j = 0; j < 8; j++) 
-        {
-            if (col & 1)
-                pixon(car.pos._1 + i, car.pos._2 + j);
-            else
-                pixoff(car.pos._1  + i, car.pos._2 + j);
-            
-            col = col >> 1;
-        } 
-    }
-}
-
-void turn_right(const float speed) 
-{
-    float new_pos = car.pos._1 + speed;
+    float new_pos = car.pos._1 + car.turn_speed;
     if(new_pos > 113) {
         car.pos._1 = 113;
         return;
     }
-    car.pos._1 = new_pos;
+    npc.pos._1 += npc.speed;
+    nps.pos._2 += npc.speed;
 }
-void turn_left(const float speed) 
+void turn_left() 
 {
-    float new_pos = car.pos._1 - speed;    
+    float new_pos = car.pos._1 - car.turn_speed;    
     if(new_pos < 0) {
         car.pos._1 = 0;
         return;

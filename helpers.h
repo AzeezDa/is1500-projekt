@@ -201,5 +201,16 @@ typedef struct Car {
 extern v2 current_curve;
 extern float road_curve;
 extern Car car;
+void draw();
+
+/* ==========================================
+ * |                 FRAMES                 |
+ * ==========================================
+ */
+extern Texture *frame1;
+extern Texture *frame2;
+extern Texture *frame3;
+extern Texture *frame3_l;
+extern Texture *frame3_r;
 
 #endif // HELPERS
