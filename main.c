@@ -5,28 +5,33 @@
 int main()
 {
     init();
-    init_car();
+    init_player();
+    init_npcs();
 
-    int x = 1, start, framestart = TICKS;
-    inputs i;
-    leds ld = {0};
-
+    int start = TICKS;
+    
     init_splash();
 
-    // Playing or not
+    inputs i;
     BYTE GAME_STATE = 0;
 
     while (1)
-    {    
-
-        if (TICKS - start > 33) 
+    {
+        // FIXED TIME UPDATE ROUTINE
+        if (TICKS - start > 33)
         {
             start = TICKS;
             clear_buf();
 
-            if(GAME_STATE) {
-                draw_car();
-            } else {
+            if (GAME_STATE)
+            {
+                draw(car.pos, car.texture);
+                draw_npcs();
+                update_road();
+                draw_road();
+            }
+            else
+            {
                 draw_menu();
                 draw_arrow();
             }
@@ -34,8 +39,8 @@ int main()
             oled_put_buffer();
         }
 
-
         i = get_inputs();
+
         /**
          * POLLING INPUT WHILE IN MENU
          */
@@ -50,27 +55,27 @@ int main()
             if(i.b4) {
                 arrow_up();
             }
+            continue;
         }
 
         /**
-         * POLLING INPUT WHILE INGAME
+         *  IN GAME
          */
-        if(GAME_STATE) 
+        if (fabs(current_curve._1) > 0.1)
         {
-            if(i.b3) {
-                turn_right();
-            }
-            if(i.b4) {
-                turn_left();
-            }
+            if (current_curve._1 > 0.0)
+                turn_left(car.turn_speed * current_curve._1);
+            if (current_curve._1 < 0.0)
+                turn_right(-car.turn_speed * current_curve._1);
         }
 
-        framestart = TICKS;
-    }
+        update_npc();
 
-    oled_put_buffer();
-    
-    
+        if (i.b4)
+            turn_left(car.turn_speed);
+        if (i.b3)
+            turn_right(car.turn_speed);
+    }
 
     for (;;)
         ;

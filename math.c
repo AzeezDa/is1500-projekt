@@ -1,18 +1,5 @@
 #include "helpers.h"
 
-#define SEED 0x1234ABCD
-
-// Based on the famous xorshift by George Marsaglia
-unsigned rand()
-{
-    static unsigned r = SEED;
-    r ^= r << 13;
-    r ^= r >> 17;
-    r ^= r << 5;
-
-    return r;
-}
-
 // Represent float as a integer to be able to access its bits
 #define FLOAT_AS_INT(N) \
     union               \
@@ -138,7 +125,7 @@ v2 vmulm(const m2x2 m, const v2 v)
 }
 
 // Returns |x|
-float abs(float x)
+float fabs(float x)
 {
     FLOAT_AS_INT(xint);
     xint.f = x;
