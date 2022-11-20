@@ -1,12 +1,14 @@
 #ifndef HELPERS
 #define HELPERS
 
+#include <stdlib.h>
+
+// To avoid stdlib errors
 void *stdin, *stdout, *stderr;
 
 // GENERAL DEFINITIONS
 #define BYTE char
 #define UBYTE unsigned char
-
 
 /*
  * This header file defines functions that should be accessible from outside
@@ -20,8 +22,6 @@ void *stdin, *stdout, *stderr;
 #define SCREEN_X_MAX 127
 #define SCREEN_Y_MIN 0
 #define SCREEN_Y_MAX 31
-
-#define RAND_MAX 0xFFFFFFFF
 
 #define DT 0.03f
 
@@ -109,7 +109,7 @@ float fabs(float);
 float sin(float);
 float cos(float);
 UBYTE overlaps(const rect, const rect);
-void translate(rect* const, const v2);
+void translate(rect *const, const v2);
 v2 center(const rect);
 
 /* ==========================================
@@ -149,8 +149,9 @@ typedef union _inputs
         UBYTE s4 : 1;
     };
 
-    struct {
-        UBYTE buttons  : 4;
+    struct
+    {
+        UBYTE buttons : 4;
         UBYTE switches : 4;
     };
 
@@ -159,8 +160,10 @@ typedef union _inputs
 
 // The leds struct includes 8 bit fields each representing the LEDs on the chip
 // Each fields number is the same as the number written on the chip, i.e _1 is LD1
-typedef union _leds {
-    struct {
+typedef union _leds
+{
+    struct
+    {
         UBYTE _1 : 1;
         UBYTE _2 : 1;
         UBYTE _3 : 1;
@@ -187,54 +190,69 @@ inline void set_leds(leds);
  * ==========================================
  */
 
-typedef struct _Texture 
+// Texture struct that stores a texture and its dimensions
+typedef struct _texture
 {
     UBYTE width, height;
-    // v2._1 = WIDTH, v2._2 = HEIGHT
     const UBYTE *texture;
-} Texture;
+} texture;
 
-extern Texture frame1;
-extern Texture frame2;
-extern Texture frame3;
-extern Texture frame3_l;
-extern Texture frame3_r;
-extern Texture frame_car;
-
-
+extern texture frame1;
+extern texture frame2;
+extern texture frame3;
+extern texture frame3_l;
+extern texture frame3_r;
+extern texture frame_car;
 
 /* ==========================================
  * |              ANIMATION                 |
  * ==========================================
  */
+
 void init_splash();
 void draw_menu();
-void turn_left(const float);
-void turn_right(const float);
-void draw(v2, const Texture*);
-void update_npc();
+void draw_arrow();
+void draw(v2, const texture *);
 
-typedef struct _npc_car 
+/* ==========================================
+ * |                CARS                    |
+ * ==========================================
+ */
+
+// Amount of total cars in on the road
+#define CARS_AMOUNT 1
+
+// Controls how wide the perspective is
+#define PERSPECTIVE_CONSTANT 0.3f
+
+// Width from road center
+#define ROAD_WIDTH 50
+
+// Struct representing a non-playable car
+typedef struct _npc_car
 {
     v2 pos;
     float speed;
-    BYTE lane;
-    Texture *texture;
+    BYTE lane; // Deviation from the center line of the road
+    texture *texture;
 } npc_car;
 
-
-typedef struct _player_car 
+// Struct representing the car that the player controls
+typedef struct _player_car
 {
     v2 pos;
     float turn_speed;
-    Texture *texture;
+    texture *texture;
 } Car;
+
+void update_npc();
+void draw_npcs();
+void turn_left(const float);
+void turn_right(const float);
 
 extern v2 current_curve;
 extern float road_curve;
 extern Car car;
-extern const float PERSP[8];
-extern npc_car npc;
-
+extern npc_car npcs[CARS_AMOUNT];
 
 #endif // HELPERS
