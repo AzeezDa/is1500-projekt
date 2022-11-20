@@ -183,34 +183,56 @@ inputs get_inputs();
 inline void set_leds(leds);
 
 /* ==========================================
+ * |                 FRAMES                 |
+ * ==========================================
+ */
+
+typedef struct _Texture 
+{
+    UBYTE width, height;
+    // v2._1 = WIDTH, v2._2 = HEIGHT
+    const UBYTE *texture;
+} Texture;
+
+extern Texture frame1;
+extern Texture frame2;
+extern Texture frame3;
+extern Texture frame3_l;
+extern Texture frame3_r;
+extern Texture frame_car;
+
+
+
+/* ==========================================
  * |              ANIMATION                 |
  * ==========================================
  */
 void init_splash();
 void draw_menu();
-void draw_car();
 void turn_left(const float);
 void turn_right(const float);
+void draw(v2, const Texture*);
 
-typedef struct Car {
-    UBYTE car_arr[14];
+typedef struct _npc_car 
+{
+    v2 pos;
+    float distance_in_road;
+    float speed;
+    Texture *texture;
+} npc_car;
+
+
+typedef struct _player_car 
+{
     v2 pos;
     float turn_speed;
+    Texture *texture;
 } Car;
 
 extern v2 current_curve;
 extern float road_curve;
 extern Car car;
-void draw();
 
-/* ==========================================
- * |                 FRAMES                 |
- * ==========================================
- */
-extern Texture *frame1;
-extern Texture *frame2;
-extern Texture *frame3;
-extern Texture *frame3_l;
-extern Texture *frame3_r;
+
 
 #endif // HELPERS

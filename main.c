@@ -18,7 +18,7 @@ int main()
         {
             start = TICKS;
             clear_buf();
-            draw_car();
+            draw(car.pos, car.texture);
             update_road();
             draw_road();
 
