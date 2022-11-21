@@ -11,7 +11,13 @@ v2 current_curve = {0.0, 200.0};
 // Store current road curve to allow interpolation
 float road_curve = 0.0;
 
-
+// Sets the road's curvature settings to default (0, 200)
+void init_road()
+{
+    current_curve._1 = 0.0;
+    current_curve._2 = 200.0;
+    road_curve = 0.0;
+}
 
 // Store list of perspective skew per height because they are used each draw routine
 const float PERSP[8] = {PERSPECTIVE_CONSTANT,

@@ -245,10 +245,12 @@ typedef struct _player_car
     texture *texture;
 } Car;
 
-void update_npc();
-void draw_npcs();
-void turn_left(const float);
-void turn_right(const float);
+void init_road();
+void init_npcs();
+void init_player();
+
+UBYTE update_npc();
+inline void turn_car(const float);
 
 extern v2 current_curve;
 extern float road_curve;

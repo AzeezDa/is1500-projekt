@@ -10,7 +10,7 @@ int main()
     bsl_init();
 
     int start = TICKS;
-    
+
     init_splash();
 
     inputs i;
@@ -45,15 +45,21 @@ int main()
         /**
          * POLLING INPUT WHILE IN MENU
          */
-        if(!GAME_STATE)
+        if (!GAME_STATE)
         {
-            if(i.b2 && !arrow_state()) {
-              GAME_STATE = 1;  
+            if (i.b2 && !arrow_state())
+            {
+                GAME_STATE = 1;
+                init_player();
+                init_road();
+                init_npcs();
             }
-            if(i.b3) {
+            if (i.b3)
+            {
                 arrow_down();
             }
-            if(i.b4) {
+            if (i.b4)
+            {
                 arrow_up();
             }
             continue;
@@ -65,17 +71,18 @@ int main()
         if (fabs(current_curve._1) > 0.1)
         {
             if (current_curve._1 > 0.0)
-                turn_left(car.turn_speed * current_curve._1);
+                turn_car(-car.turn_speed * current_curve._1);
             if (current_curve._1 < 0.0)
-                turn_right(-car.turn_speed * current_curve._1);
+                turn_car(-car.turn_speed * current_curve._1);
         }
 
-        update_npc();
-
         if (i.b4)
-            turn_left(car.turn_speed);
+            turn_car(-car.turn_speed);
         if (i.b3)
-            turn_right(car.turn_speed);
+            turn_car(car.turn_speed);
+
+        if (car.pos._1 < 4.0 || car.pos._1 > 110.0 || update_npc())
+            GAME_STATE = 0;
     }
 
     for (;;)

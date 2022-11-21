@@ -32,8 +32,8 @@ void draw_npcs()
         draw(npcs[i].pos, npcs[i].texture);
 }
 
-// Update the npcars positions
-void update_npc()
+// Update the npcars positions and returns 1 if a car crashed into the player
+UBYTE update_npc()
 {
     int i;
     for (i = 0; i < CARS_AMOUNT; i++)
@@ -72,6 +72,10 @@ void update_npc()
         else if (npcs[i].pos._2 > 10.0) // MEDIUM
             npcs[i].texture = &frame2;
 
+        // Return 1 if cars overlap
+        if (npcs[i].pos._2 > 20.0 && fabs(npcs[i].pos._1 - car.pos._1) < 14.0)
+            return 1;
+
         // If car exists the screen generate new values for it
         if (npcs[i].pos._2 > 32.0)
         {      
@@ -82,6 +86,8 @@ void update_npc()
             npcs[i].lane = rand() % 40 - 20;
         }
     }
+
+    return 0;
 }
 
 void init_player()
@@ -92,26 +98,8 @@ void init_player()
     car.texture = &frame_car;
 }
 
-// Both functions below can be reduced into one for the future cuz going outside crashes the car?
-
-void turn_right(const float speed)
+// Turns (in the x direction) the car into the given velocity
+inline void turn_car(const float velocity)
 {
-    float new_pos = car.pos._1 + speed;
-    if (new_pos > 113)
-    {
-        car.pos._1 = 113;
-        return;
-    }
-    car.pos._1 = new_pos;
-}
-
-void turn_left(const float speed)
-{
-    float new_pos = car.pos._1 - speed;
-    if (new_pos < 0)
-    {
-        car.pos._1 = 0;
-        return;
-    }
-    car.pos._1 = new_pos;
+    car.pos._1 = car.pos._1 + velocity;
 }
