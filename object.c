@@ -5,10 +5,7 @@ void draw(v2 pos, const texture *tex)
 {
     int x = pos._1, y = pos._2;
 
-    // Check validity of coordinates
-    if(x  < SCREEN_X_MIN || x  > SCREEN_X_MAX - tex->width || y < SCREEN_Y_MIN || y > SCREEN_Y_MAX) return;
     int i, j;
-    
     for(i = 0; i < tex->width; i++) 
     {
         UBYTE col = tex->texture[i];

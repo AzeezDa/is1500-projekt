@@ -254,5 +254,5 @@ extern v2 current_curve;
 extern float road_curve;
 extern Car car;
 extern npc_car npcs[CARS_AMOUNT];
-
+    
 #endif // HELPERS
