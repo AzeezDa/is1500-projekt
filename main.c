@@ -37,10 +37,11 @@ int main()
                 // draw_arrow();
                 // Print words
                 v2 pos = {0.0, 0.0};
-                prints("Azeez Daoud its azeezin time", pos);
-                pos._1 = 0.0;
+                prints("Azeez Daoud", pos);
                 pos._2 = 9.0;
+                prints("its azeezin time", pos);
                 // prints("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", pos);
+                pos._2 = 19.0;
                 printn(1234567890, pos);
             }
 

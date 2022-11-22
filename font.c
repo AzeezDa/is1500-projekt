@@ -122,11 +122,14 @@ void prints(char *word, v2 pos)
  */
 void printn(int rev, v2 pos) 
 {
-    int index, num = 0, rem, x = pos._1, y = pos._2;
+    // TODO: TURN INTO DIGITS ARRAY SINCE INTEGER CAN ONLY BE 10 DIGITS SO char num[10] CAN WORK AAAHHH
+    int index, rem, zeroes = 0, num = 0, x = pos._1, y = pos._2;
 
     // We need to reverse our number since we print it using modulo 10
     while(rev != 0) 
     {
+        rem = rev % 10;
+        if(rem == 0) zeroes++;
         num = num * 10 + rev % 10;
         rev /= 10;
     }
@@ -155,5 +158,32 @@ void printn(int rev, v2 pos)
             x = 0;
         }
         num /= 10;
+    }
+
+    // Zeroes
+    int i;
+    index = 0;
+    for(i = 0; i < zeroes; i++) 
+    {
+        int i, j;
+        for(i = 0; i < 5; i++) 
+        {
+            UBYTE col = numbers[index++];
+            for(j = 0; j < 8; j++)
+            {
+                if (col & 1)
+                    pixon(x + i, y + j);
+                else
+                    pixoff(x + i, y + j);
+                
+                col = col >> 1;
+            } 
+        }
+        x+=6; // Width of number + space of 1 pixel
+        if(x+5 >= 127) 
+        {
+            y += 9; // Height of letter + space of 1 pixel
+            x = 0;
+        }
     }
 }
