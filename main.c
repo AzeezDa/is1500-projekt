@@ -7,10 +7,11 @@ int main()
     init();
     init_player();
     init_npcs();
+    bsl_init();
 
     int start = TICKS;
     
-    init_splash();
+    //init_splash();
 
     inputs i;
     BYTE GAME_STATE = 0;
@@ -32,8 +33,15 @@ int main()
             }
             else
             {
-                draw_menu();
-                draw_arrow();
+                // draw_menu();
+                // draw_arrow();
+                // Print words
+                v2 pos = {0.0, 0.0};
+                prints("Azeez Daoud its azeezin time", pos);
+                pos._1 = 0.0;
+                pos._2 = 9.0;
+                // prints("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", pos);
+                printn(1234567890, pos);
             }
 
             oled_put_buffer();

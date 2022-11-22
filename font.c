@@ -59,6 +59,27 @@ BYTE font[260] = {
                 0x88, 0x50, 0x20, 0x10, 0x08, // y
                 0x88, 0xc8, 0xa8, 0x98, 0x88  // z
                 };
+
+BYTE numbers[50] = {
+                // Numbers 
+                0x7e, 0x81, 0x81, 0x81, 0x7e, // 0
+                0x00, 0x82, 0xff, 0x80, 0x00, // 1
+                0xc2, 0xa1, 0x91, 0x91, 0x8e, // 2
+                0x62, 0x81, 0x89, 0x89, 0x76, // 3
+                0x18, 0x14, 0x12, 0xff, 0x10, // 4
+                0x4f, 0x89, 0x89, 0x89, 0x71, // 5
+                0x7e, 0x89, 0x89, 0x89, 0x72, // 6
+                0x01, 0x01, 0xe1, 0x11, 0x0f, // 7
+                0x76, 0x89, 0x89, 0x89, 0x76, // 8
+                0x06, 0x89, 0x89, 0x89, 0x7e  // 9
+                };
+
+/**
+ * 
+ * 
+ * @param word 
+ * @param pos 
+ */
 void prints(char *word, v2 pos) 
 {
     int index, wordNum = 0, x = pos._1, y = pos._2;
@@ -90,5 +111,49 @@ void prints(char *word, v2 pos)
             y += 9; // Height of letter + space of 1 pixel
             x = 0;
         }
+    }
+}
+
+/**
+ * Prints out an integer on our screen at a given position
+ *
+ * @param rev Our integer to print out
+ * @param pos Our vec2 containing x and y position
+ */
+void printn(int rev, v2 pos) 
+{
+    int index, num = 0, rem, x = pos._1, y = pos._2;
+
+    // We need to reverse our number since we print it using modulo 10
+    while(rev != 0) 
+    {
+        num = num * 10 + rev % 10;
+        rev /= 10;
+    }
+
+    while(num != 0) 
+    {
+        index = (num%10)*5;
+        int i, j;
+        for(i = 0; i < 5; i++) 
+        {
+            UBYTE col = numbers[index++];
+            for(j = 0; j < 8; j++)
+            {
+                if (col & 1)
+                    pixon(x + i, y + j);
+                else
+                    pixoff(x + i, y + j);
+                
+                col = col >> 1;
+            } 
+        }
+        x+=6; // Width of number + space of 1 pixel
+        if(x+5 >= 127) 
+        {
+            y += 9; // Height of letter + space of 1 pixel
+            x = 0;
+        }
+        num /= 10;
     }
 }
