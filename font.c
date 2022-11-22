@@ -1,7 +1,9 @@
-#include <helpers.h>
+#include "helpers.h"
 
 // a-z, A-Z, 0-9
-BYTE font[62] = {0x0};
+// TODO: Add special characters
+BYTE font[8] = {0x5, 0x6, 0x7, 0x8,
+                0x1, 0x2, 0x3, 0x4};
 
 void prints(char *word, v2 pos) 
 {
