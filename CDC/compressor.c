@@ -16,12 +16,20 @@ int main()
         if (!array[i])
         {
             printf("0x00,");
-            int j;
-            for (j = i + 1; j < arr_size && !array[j]; j++, final_size--);
+            int zidx, zcount;
+            for (zidx = i + 1, zcount = 1; zidx < arr_size && !array[zidx]; zidx++, final_size--, zcount++)
+            {
+                if (zcount > 255)
+                {
+                    zcount = 0;
+                    final_size++;
+                    printf("0xFF,");
+                }
+            }
 
-            final_size += 1;
-            printf("0x%02X,", j - i);
-            i = j - 1;
+            final_size++;
+            printf("0x%02X,", zcount);
+            i = zidx - 1;
             continue;
         }
         printf("0x%02X,", array[i]);
