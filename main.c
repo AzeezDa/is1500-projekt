@@ -11,7 +11,7 @@ int main()
 
     int start = TICKS;
     
-    //init_splash();
+    init_splash();
 
     inputs i;
     BYTE GAME_STATE = 0;
@@ -33,16 +33,8 @@ int main()
             }
             else
             {
-                // draw_menu();
-                // draw_arrow();
-                // Print words
-                v2 pos = {0.0, 0.0};
-                // prints("Azeez Daoud", pos);
-                // pos._2 = 9.0;
-                // prints("its azeezin time", pos);
-                printn(1234567890, pos);
-                // pos._2 = 19.0;
-                // printn(101, pos);
+                draw_menu();
+                draw_arrow();
             }
 
             oled_put_buffer();
