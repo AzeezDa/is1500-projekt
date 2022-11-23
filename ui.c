@@ -89,6 +89,7 @@ int frame_sizes[] = {204, 211, 308, 316, 247, 258, 241, 172, 183, 166, 125, 184}
 // Plays through the animations frame by frame
 void init_splash() 
 {
+
     const int DELAY = 167; // Animation should take 2000ms. Gives 2000/12 ~= 167 ms per frame
     int frame_num, i, j, zeroes, timer = TICKS;
     for(frame_num = 0; frame_num < 12; frame_num++) {
@@ -107,7 +108,7 @@ void init_splash()
         }
 
         while (TICKS - timer < DELAY);
-
+        oled_put_buffer();
         timer = TICKS;
     }
 }
