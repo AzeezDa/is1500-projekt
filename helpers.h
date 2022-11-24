@@ -254,5 +254,12 @@ extern v2 current_curve;
 extern float road_curve;
 extern Car car;
 extern npc_car npcs[CARS_AMOUNT];
+
+/* ==========================================
+ * |                FONT                    |
+ * ==========================================
+ */
+void prints(char*, v2);
+void printn(int, v2);
     
 #endif // HELPERS
