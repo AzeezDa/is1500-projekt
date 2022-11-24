@@ -7,6 +7,7 @@ int main()
     init();
     init_player();
     init_npcs();
+    bsl_init();
 
     int start = TICKS;
     
