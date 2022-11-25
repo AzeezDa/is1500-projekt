@@ -2,7 +2,7 @@
 
 // a-z, A-Z, 0-9
 // TODO: Add special characters
-BYTE font[310] = {
+BYTE font[315] = {
                 // CAPITAL LETTERS
                 0xfc, 0x12, 0x11, 0x12, 0xfc, // A
                 0xff, 0x89, 0x89, 0x89, 0x76, // B
@@ -69,21 +69,8 @@ BYTE font[310] = {
                 0x7e, 0x89, 0x89, 0x89, 0x72, // 6
                 0x01, 0x01, 0xe1, 0x11, 0x0f, // 7
                 0x76, 0x89, 0x89, 0x89, 0x76, // 8
-                0x06, 0x89, 0x89, 0x89, 0x7e  // 9
-                };
-
-BYTE numbers[50] = {
-                // Numbers 
-                0x7e, 0x81, 0x81, 0x81, 0x7e, // 0
-                0x00, 0x82, 0xff, 0x80, 0x00, // 1
-                0xc2, 0xa1, 0x91, 0x91, 0x8e, // 2
-                0x62, 0x81, 0x89, 0x89, 0x76, // 3
-                0x18, 0x14, 0x12, 0xff, 0x10, // 4
-                0x4f, 0x89, 0x89, 0x89, 0x71, // 5
-                0x7e, 0x89, 0x89, 0x89, 0x72, // 6
-                0x01, 0x01, 0xe1, 0x11, 0x0f, // 7
-                0x76, 0x89, 0x89, 0x89, 0x76, // 8
-                0x06, 0x89, 0x89, 0x89, 0x7e  // 9
+                0x06, 0x89, 0x89, 0x89, 0x7e,  // 9
+                0x10, 0x10, 0x10, 0x10, 0x10  // -                
                 };
 
 /**
@@ -100,15 +87,23 @@ void prints(char *word, v2 pos)
         index = (word[wordNum] - 'A')*5;
         
         // compensations
-        if(index >= 130) index -= 30; // For lowercase letters
-        if(index <= -165) // For space
+        if(index >= 130) // For lowercase letters 
+        { 
+            index -= 30;
+        } 
+        else if(index == -165) // For space
         {
             x += 5;
             wordNum++; // Increment word char
             continue;
         }
-        if(-85 <= index && index <= -35) {
+        else if(-85 <= index && index <= -35) // For numbers 0 - 9
+        {
             index += 345;
+        }
+        else if(index == -100) // If we found a negative (-) sign
+        {
+            index = 310;
         }
 
         int i, j;
@@ -143,14 +138,23 @@ void prints(char *word, v2 pos)
  */
 void printn(int num, v2 pos) 
 {
-    char num_array[11]; // Integer is max 10 digits
+    char num_array[12]; // Integer is max 10 digits + 1 negative (-) sign
 
     int i;
     for(i = 0; i < 11; i++) {
         num_array[i] = '\0';
     }
 
-    int digit, index = 0;
+    int digit, sign=0, index=0;
+    
+    // Check if integer is negative or not
+    if(num < 0) 
+    {
+        sign++;
+        num *= -1;
+        index++;
+    } 
+
     while(num != 0) 
     {
         digit = num % 10;
@@ -165,6 +169,14 @@ void printn(int num, v2 pos)
         temp = num_array[i];
         num_array[i] = num_array[index-1-i];
         num_array[index-1-i] = temp;
+    }
+
+    // If our integer was negative we insert the negative (-) sign as the first char
+    if(sign) {
+        for(i = index-1; i > 0; i--) {
+            num_array[i] = num_array[i-1];
+        }
+        num_array[0] = '-';
     }
 
     prints(num_array, pos);
