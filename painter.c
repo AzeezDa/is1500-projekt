@@ -83,30 +83,3 @@ void clear_buf()
     for (i = 0; i < OLED_BUF_SIZE; i++)
         display_buffer[i] = 0;
 }
-
-void draw_rectangle(const rect r)
-{
-    draw_line(r.x, r.y, r.x + r.w, r.y);             // Top
-    draw_line(r.x, r.y + r.h, r.x + r.w, r.y + r.h); // Bottom
-    draw_line(r.x, r.y, r.x, r.y + r.h);             // Left
-    draw_line(r.x + r.w, r.y, r.x + r.w, r.y + r.h); // Right
-}
-
-// Draws the given rectangle transformed by a given matrix at the specified origin
-void draw_rectangle_m(const rect r, const m2x2 m, const v2 o)
-{
-    v2 ul = {r.x - o._1, r.y - o._2};
-    v2 ur = {r.x + r.w - o._1, r.y - o._2};
-    v2 bl = {r.x - o._1, r.y + r.h - o._2};
-    v2 br = {r.x + r.w - o._1, r.y + r.h - o._2};
-
-    ul = vmulm(m, ul);
-    ur = vmulm(m, ur);
-    bl = vmulm(m, bl);
-    br = vmulm(m, br);
-
-    draw_line(ul._1 + o._1, ul._2 + o._2, ur._1 + o._1, ur._2 + o._2);
-    draw_line(bl._1 + o._1, bl._2 + o._2, br._1 + o._1, br._2 + o._2);
-    draw_line(ul._1 + o._1, ul._2 + o._2, bl._1 + o._1, bl._2 + o._2);
-    draw_line(ur._1 + o._1, ur._2 + o._2, br._1 + o._1, br._2 + o._2);
-}

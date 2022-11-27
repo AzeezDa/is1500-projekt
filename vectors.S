@@ -45,7 +45,7 @@ _isr_stub:
 	sw 	 $at, 4($sp)
 	sw 	 $t0, 8($sp)
 	sw 	 $t1, 12($sp)
-	sw 	 $t1, 12($sp)
+	sw 	 $t2, 16($sp)
 
 	# Increment tick
 	la   $t0, TICKS
@@ -65,6 +65,7 @@ _isr_stub:
 	lw 	 $at, 4($sp)
 	lw 	 $t0, 8($sp)
 	lw 	 $t1, 12($sp)
+	lw 	 $t2, 16($sp)
 	addi $sp, $sp, 20
 
 	.set at

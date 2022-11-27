@@ -13,6 +13,7 @@ void init_npcs()
     {
         npcs[i].texture = &frame1; // Smallest car texture
         npcs[i].speed = UFRAND * 0.0008f + 0.001f;
+        npcs[i].speed *= CARS_AMOUNT;
 
         // Random deviation from center line in [-20, 20]
         npcs[i].lane =  rand() % 40 - 20;
@@ -81,7 +82,10 @@ UBYTE update_npc()
         {      
             // Generate new random distance and clamp it due to some bug :(
             npcs[i].pos._2 = UFRAND * -100.0;
-            npcs[i].pos._2 = npcs[i].pos._2 < -100.0 ? -100.0 : npcs[i].pos._2;
+
+            npcs[i].speed = UFRAND * 0.0008f + 0.001f;
+            npcs[i].speed *= CARS_AMOUNT;
+
             npcs[i].texture = &frame1; 
             npcs[i].lane = rand() % 40 - 20;
         }
@@ -94,7 +98,7 @@ void init_player()
 {
     car.pos._1 = 60;
     car.pos._2 = 23;
-    car.turn_speed = 0.005f;
+    car.turn_speed = 0.004f * CARS_AMOUNT;
     car.texture = &frame_car;
 }
 
