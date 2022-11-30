@@ -211,6 +211,7 @@ extern texture frame_car;
 
 void init_splash();
 void draw_menu();
+void display_scoreboard(); 
 void draw_arrow();
 void draw(v2, const texture *);
 
@@ -259,7 +260,10 @@ extern npc_car npcs[CARS_AMOUNT];
  * |                FONT                    |
  * ==========================================
  */
-void prints(char*, v2);
+#define LETTER_WIDTH 5
+#define LETTER_HEIGHT 8
+
+v2 prints(char*, v2);
 void printn(int, v2);
     
 #endif // HELPERS

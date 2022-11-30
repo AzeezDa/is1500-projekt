@@ -1,37 +1,7 @@
 #include "helpers.h"
 
-// a-z, A-Z, 0-9
-// TODO: Add special characters
-BYTE font[315] = {
-                // CAPITAL LETTERS
-                0xfc, 0x12, 0x11, 0x12, 0xfc, // A
-                0xff, 0x89, 0x89, 0x89, 0x76, // B
-                0x7e, 0x81, 0x81, 0x81, 0x42, // C
-                0xff, 0x81, 0x81, 0x81, 0x7e, // D
-                0xff, 0x91, 0x91, 0x91, 0x81, // E
-                0xff, 0x11, 0x11, 0x11, 0x01, // F
-                0x7e, 0x81, 0x81, 0x91, 0x72, // G
-                0xff, 0x10, 0x10, 0x10, 0xff, // H
-                0x00, 0x81, 0xff, 0x81, 0x00, // I
-                0x41, 0x81, 0x81, 0x81, 0x7f, // J
-                0xff, 0x08, 0x14, 0x22, 0xc1, // K
-                0xff, 0x80, 0x80, 0x80, 0x80, // L
-                0xff, 0x02, 0x04, 0x02, 0xff, // M
-                0xff, 0x06, 0x18, 0x60, 0xff, // N
-                0x7e, 0x81, 0x81, 0x81, 0x7e, // O
-                0xff, 0x09, 0x09, 0x09, 0x06, // P
-                0x3e, 0x41, 0x61, 0x41, 0xbe, // Q
-                0xff, 0x09, 0x19, 0x29, 0xc6, // R
-                0x46, 0x89, 0x89, 0x89, 0x72, // S
-                0x01, 0x01, 0xff, 0x01, 0x01, // T
-                0x0f, 0x70, 0x80, 0x70, 0x0f, // U
-                0x7f, 0x80, 0x80, 0x80, 0x7f, // V
-                0x7f, 0x80, 0x7f, 0x80, 0x7f, // W
-                0x81, 0x66, 0x18, 0x66, 0x81, // X
-                0x07, 0x08, 0xf0, 0x08, 0x07, // Y
-                0xe1, 0x91, 0x89, 0x85, 0x83, // Z
-
-                // lowercase letters
+UBYTE font[3][130] = {
+        {
                 0x60, 0x94, 0x94, 0x94, 0xf8, // a
                 0xff, 0x88, 0x88, 0x88, 0x70, // b
                 0x78, 0x84, 0x84, 0x84, 0x84, // c
@@ -57,9 +27,37 @@ BYTE font[315] = {
                 0x70, 0x80, 0x70, 0x80, 0x70, // w
                 0x88, 0x50, 0x20, 0x50, 0x88, // x
                 0x88, 0x50, 0x20, 0x10, 0x08, // y
-                0x88, 0xc8, 0xa8, 0x98, 0x88,  // z
-
-                // Numbers 
+                0x88, 0xc8, 0xa8, 0x98, 0x88  // z
+                },
+                {
+                0xfc, 0x12, 0x11, 0x12, 0xfc, // A
+                0xff, 0x89, 0x89, 0x89, 0x76, // B
+                0x7e, 0x81, 0x81, 0x81, 0x42, // C
+                0xff, 0x81, 0x81, 0x81, 0x7e, // D
+                0xff, 0x91, 0x91, 0x91, 0x81, // E
+                0xff, 0x11, 0x11, 0x11, 0x01, // F
+                0x7e, 0x81, 0x81, 0x91, 0x72, // G
+                0xff, 0x10, 0x10, 0x10, 0xff, // H
+                0x00, 0x81, 0xff, 0x81, 0x00, // I
+                0x41, 0x81, 0x81, 0x81, 0x7f, // J
+                0xff, 0x08, 0x14, 0x22, 0xc1, // K
+                0xff, 0x80, 0x80, 0x80, 0x80, // L
+                0xff, 0x02, 0x04, 0x02, 0xff, // M
+                0xff, 0x06, 0x18, 0x60, 0xff, // N
+                0x7e, 0x81, 0x81, 0x81, 0x7e, // O
+                0xff, 0x09, 0x09, 0x09, 0x06, // P
+                0x3e, 0x41, 0x61, 0x41, 0xbe, // Q
+                0xff, 0x09, 0x19, 0x29, 0xc6, // R
+                0x46, 0x89, 0x89, 0x89, 0x72, // S
+                0x01, 0x01, 0xff, 0x01, 0x01, // T
+                0x0f, 0x70, 0x80, 0x70, 0x0f, // U
+                0x7f, 0x80, 0x80, 0x80, 0x7f, // V
+                0x7f, 0x80, 0x7f, 0x80, 0x7f, // W
+                0x81, 0x66, 0x18, 0x66, 0x81, // X
+                0x07, 0x08, 0xf0, 0x08, 0x07, // Y
+                0xe1, 0x91, 0x89, 0x85, 0x83 // Z
+                },
+                {
                 0x7e, 0x81, 0x81, 0x81, 0x7e, // 0
                 0x00, 0x82, 0xff, 0x80, 0x00, // 1
                 0xc2, 0xa1, 0x91, 0x91, 0x8e, // 2
@@ -70,46 +68,57 @@ BYTE font[315] = {
                 0x01, 0x01, 0xe1, 0x11, 0x0f, // 7
                 0x76, 0x89, 0x89, 0x89, 0x76, // 8
                 0x06, 0x89, 0x89, 0x89, 0x7e,  // 9
-                0x10, 0x10, 0x10, 0x10, 0x10  // -                
+                0x10, 0x10, 0x10, 0x10, 0x10  // -   
+                }
                 };
-
 /**
  * Prints the given string on the screen at a given position.
  * 
- * @param word String
+ * @param word Our word (or phrase) to print out
  * @param pos Our vec2 containing x and y position
  */
-void prints(char *word, v2 pos) 
+v2 prints(char *word, v2 pos) 
 {
-    int index, wordNum = 0, x = pos._1, y = pos._2;
+    int index, type, wordNum = 0, x = pos._1, y = pos._2;
+    char letter;
+
     while(word[wordNum] != '\0') 
     {
-        index = (word[wordNum] - 'A')*5;
-        
-        // compensations
-        if(index >= 130) // For lowercase letters 
-        { 
-            index -= 30;
+        letter = word[wordNum++];
+        if(letter >= '0' && letter <= '9') // number
+        {
+            type = 2;
+            index = (letter - '0')*5;
         } 
-        else if(index == -165) // For space
+        else if(letter >= 'A' && letter <= 'Z') // uppercase
         {
-            x += 5;
-            wordNum++; // Increment word char
-            continue;
-        }
-        else if(-85 <= index && index <= -35) // For numbers 0 - 9
+            type = 1;
+            index = (letter - 'A')*5;
+        } 
+        else if(letter >= 'a' && letter <= 'z') // lowercase
         {
-            index += 345;
-        }
-        else if(index == -100) // If we found a negative (-) sign
+            type = 0;
+            index = (letter - 'a')*5;
+        } 
+        else if(letter == ' ') // space
         {
-            index = 310;
+            type = 3;
+            index = 0;
         }
-
+        else if(letter == '-') // minus
+        {
+            type = 2;
+            index = 50;
+        }
+        else 
+        {
+            // Char was not recognized
+            return;
+        }
         int i, j;
         for(i = 0; i < 5; i++) 
         {
-            UBYTE col = font[index++];
+            UBYTE col = font[type][index++];
             for(j = 0; j < 8; j++)
             {
                 if (col & 1)
@@ -120,64 +129,68 @@ void prints(char *word, v2 pos)
                 col = col >> 1;
             } 
         }
-        wordNum++; // Increment word char
-        x+=6; // Width of letter + space of 1 pixel
-        if(x+5 >= 127) 
+        x += LETTER_WIDTH + 1; // Width of letter + space of 1 pixel
+        if(x + LETTER_WIDTH >= 127) 
         {
-            y += 9; // Height of letter + space of 1 pixel
+            y += LETTER_HEIGHT; // Height of letter + space of 1 pixel
             x = 0;
         }
     }
+    pos._1 = x;
+    pos._2 = y;
+    return pos;
 }
 
 /**
  * Prints out an integer on our screen at a given position
  *
- * @param rev Our integer to print out
+ * @param num Our integer to print out
  * @param pos Our vec2 containing x and y position
  */
 void printn(int num, v2 pos) 
 {
     char num_array[12]; // Integer is max 10 digits + 1 negative (-) sign
 
-    int i;
-    for(i = 0; i < 11; i++) {
+    int i, digit, sign=0, index=10;
+    for(i = 0; i < 12; i++) {
         num_array[i] = '\0';
     }
-
-    int digit, sign=0, index=0;
     
     // Check if integer is negative or not
     if(num < 0) 
     {
-        sign++;
+        sign = 1;
         num *= -1;
-        index++;
     } 
-
+    // special case for 0
+    if(!num) 
+    {
+        num_array[index] = '0';
+    }
+    // Turn integer into char array
     while(num != 0) 
     {
         digit = num % 10;
-        num_array[index++] = digit + '0'; // Store digit as char
+        num_array[index--] = digit + '0'; // Store digit as char
         num /= 10;
     }
-
-    // Reverse the num_array
-    char temp;
-    for(i = 0; i < index/2; i++) 
+    // insert negative sign if num < 0
+    if(sign) 
     {
-        temp = num_array[i];
-        num_array[i] = num_array[index-1-i];
-        num_array[index-1-i] = temp;
+        num_array[index--] = '-';
     }
-
-    // If our integer was negative we insert the negative (-) sign as the first char
-    if(sign) {
-        for(i = index-1; i > 0; i--) {
-            num_array[i] = num_array[i-1];
-        }
-        num_array[0] = '-';
+    // Take splice of num_array with values in them
+    char subset[11-index];
+    for(i = 0; i < 11-index; i++) 
+    {
+        subset[i] = num_array[index+i+1];
     }
+    prints(subset, pos);
+}
 
-    prints(num_array, pos);
+void printsn(char *word, int num, v2 pos) 
+{
+    pos = prints(word, pos);
+    pos._1 += LETTER_WIDTH+1;
+    printn(num, pos);
 }
