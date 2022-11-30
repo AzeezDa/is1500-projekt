@@ -163,9 +163,9 @@ void printn(int num, v2 pos)
         num *= -1;
     } 
     // special case for 0
-    if(!num) 
+    if(num==0) 
     {
-        num_array[index] = '0';
+        num_array[index--] = '0';
     }
     // Turn integer into char array
     while(num != 0) 
@@ -180,8 +180,8 @@ void printn(int num, v2 pos)
         num_array[index--] = '-';
     }
     // Take splice of num_array with values in them
-    char subset[11-index];
-    for(i = 0; i < 11-index; i++) 
+    char subset[12-index];
+    for(i = 0; i < 12-index; i++) 
     {
         subset[i] = num_array[index+i+1];
     }
