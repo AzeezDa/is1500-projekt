@@ -195,7 +195,8 @@ typedef struct _npc_car
 {
     v2 pos;
     float speed;
-    BYTE lane; // Deviation from the center line of the road
+    float lane; // Deviation from the center line of the road
+    float target_lane; // Lane that the car will switch to
     texture *texture;
 } npc_car;
 
