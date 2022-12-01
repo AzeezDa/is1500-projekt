@@ -94,7 +94,7 @@ int main()
                     GAME_STATE = 0;
                 break;
             case SCOREBOARD:
-                if (i.b2)
+                if (i.b1)
                     GAME_STATE = MENU;
                 break;
             case DEATH:
