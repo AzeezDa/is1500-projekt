@@ -61,14 +61,59 @@ void next_letter(int sign)
 {
     if(UNDERSCORE_STATE == FIRST) 
     {
-        name[0] += sign;
+        if(name[0] > 'Z' + 1) 
+        {
+            name[0] = 'A';
+        }
+        else if (name[0] <= 'A' - 1) 
+        {
+            name[0] = 'Z';
+        }
+        else 
+        {
+            name[0] += sign;
+        }
     } 
     else if(UNDERSCORE_STATE == SECOND) 
     {
-        name[2] += sign;
+        if(name[2] > 'Z' + 1) 
+        {
+            name[2] = 'A';
+        }
+        else if (name[2] < 'A' - 1) 
+        {
+            name[2] = 'Z';
+        }
+        else 
+        {
+            name[2] += sign;
+        }
     } 
     else 
     {
-        name[4] += sign;
+        if(name[4] > 'Z' + 1) 
+        {
+            name[4] = 'A';
+        }
+        else if (name[4] < 'A' - 1) 
+        {
+            name[4] = 'Z';
+        }
+        else 
+        {
+            name[4] += sign;
+        }
     }   
+}
+
+void save_score(int points) 
+{
+    int i;
+    char username[4];
+    for(i = 0; i < 3; i++) {
+        username[i] = name[i*2];
+        name[i*2] = 'A';
+    }
+    add_score(username, points);
+    
 }

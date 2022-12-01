@@ -115,8 +115,11 @@ int main()
                     GAME_STATE = MENU;
                 break;
             case DEATH:
-                if(i.b1)
+                if(i.b1) {
+                    save_score(100);
                     GAME_STATE = SCOREBOARD;
+                }
+
                 if(i.b2) 
                 {        
                     // Delay 
@@ -140,10 +143,30 @@ int main()
                     }   
                     button_delay = TICKS; 
                 }
-                if(i.b3)
+                if(i.b3) 
+                {
+                    // Delay 
+                    if((TICKS-button_delay)<300) 
+                    {
+                        continue;
+                    }
+                    // Reset delay
+                    button_delay = TICKS; 
                     next_letter(1);
-                if(i.b4)
+                }
+                    
+                if(i.b4) 
+                {
+                    // Delay 
+                    if((TICKS-button_delay)<300) 
+                    {
+                        continue;
+                    }
+                    // Reset delay
+                    button_delay = TICKS; 
                     next_letter(-1);
+                }
+
                 break;
         }
 

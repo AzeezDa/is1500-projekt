@@ -231,6 +231,7 @@ enum _UNDERSCORE_STATES {FIRST=60, SECOND=72, THIRD=84} UNDERSCORE_STATE;
 void display_game_over();
 void death_transition();
 void next_letter(int);
+void save_score(int);
 
 
 /* ==========================================
