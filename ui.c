@@ -28,12 +28,12 @@ void draw_arrow()
 
 void arrow_up()
 {
-    ARROW_STATE = UP;
+    ARROW_STATE = PLAY;
 }
 
 void arrow_down()
 {
-    ARROW_STATE = DOWN;
+    ARROW_STATE = SCORE;
 }
 
 
