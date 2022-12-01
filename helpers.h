@@ -58,16 +58,6 @@ void oled_init();
 // Random float in [0, 1]
 #define UFRAND ((float)rand() / (float)RAND_MAX)
 
-// 2x2 32-bit Float Matrix
-typedef union _matrix2x2
-{
-    float m[2][2];
-    struct
-    {
-        float _11, _12, _21, _22;
-    };
-} m2x2;
-
 // 32-bit float 2D Vector
 typedef union _vec2
 {
@@ -78,39 +68,8 @@ typedef union _vec2
     };
 } v2;
 
-// A rectangle represented by an origin (upper left corner) with width and height
-typedef union _rect
-{
-    struct
-    {
-        v2 origin;
-        v2 size;
-    };
-    struct
-    {
-        float x, y, w, h;
-    };
-} rect;
-
-const m2x2 IMATRIX2;
 const v2 VZERO;
-
-m2x2 transpose(m2x2);
-m2x2 relfectx(m2x2);
-m2x2 relfecty(m2x2);
-m2x2 mmul(const m2x2, const m2x2);
-m2x2 mscale(m2x2, const float);
-m2x2 get_rot_mat(const float);
-v2 vscale(v2, const float);
-float sqrt(float);
-float norm(const v2);
-v2 vmulm(const m2x2, const v2);
 float fabs(float);
-float sin(float);
-float cos(float);
-UBYTE overlaps(const rect, const rect);
-void translate(rect *const, const v2);
-v2 center(const rect);
 
 /* ==========================================
  * |               PAINTER                  |
@@ -121,8 +80,6 @@ void pixon(const BYTE, const BYTE);
 void pixoff(const BYTE, const BYTE);
 void draw_line(int x0, int y0, const int x1, const int y1);
 void clear_buf();
-void draw_rectangle(const rect);
-void draw_rectangle_m(const rect, const m2x2, const v2);
 
 /* ==========================================
  * |              IO_DEVICES                |
@@ -221,7 +178,7 @@ void draw(v2, const texture *);
  */
 
 // Amount of total cars in on the road
-#define CARS_AMOUNT 1
+#define CARS_AMOUNT 2
 
 // Controls how wide the perspective is
 #define PERSPECTIVE_CONSTANT 0.3f
@@ -246,10 +203,12 @@ typedef struct _player_car
     texture *texture;
 } Car;
 
-void update_npc();
-void draw_npcs();
-void turn_left(const float);
-void turn_right(const float);
+void init_road();
+void init_npcs();
+void init_player();
+
+UBYTE update_npc();
+inline void turn_car(const float);
 
 extern v2 current_curve;
 extern float road_curve;
