@@ -30,7 +30,6 @@ int main()
                 draw_npcs();
                 update_road();
                 draw_road();
-                display_scoreboard();
             }
             else
             {
