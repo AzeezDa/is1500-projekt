@@ -26,10 +26,11 @@ int main()
 
             if (GAME_STATE)
             {
-                draw(car.pos, car.texture);
-                draw_npcs();
-                update_road();
-                draw_road();
+                // draw(car.pos, car.texture);
+                // draw_npcs();
+                // update_road();
+                // draw_road();
+                display_scoreboard();
             }
             else
             {

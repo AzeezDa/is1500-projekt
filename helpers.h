@@ -257,13 +257,22 @@ extern Car car;
 extern npc_car npcs[CARS_AMOUNT];
 
 /* ==========================================
+ * |                SCORE                   |
+ * ==========================================
+ */
+void display_scoreboard();
+
+
+
+/* ==========================================
  * |                FONT                    |
  * ==========================================
  */
 #define LETTER_WIDTH 5
-#define LETTER_HEIGHT 8
+#define LETTER_HEIGHT 6
 
 v2 prints(char*, v2);
-void printn(int, v2);
+v2 printn(int, v2);
+v2 printsn(char*, int, v2);
     
 #endif // HELPERS
