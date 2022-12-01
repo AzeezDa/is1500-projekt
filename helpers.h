@@ -143,6 +143,13 @@ inputs get_inputs();
 inline void set_leds(leds);
 
 /* ==========================================
+ * |                GAME STATE              |
+ * ==========================================
+ */
+
+enum _GAME_STATE {MENU, GAME, SCOREBOARD, DEATH} GAME_STATE;
+
+/* ==========================================
  * |                 FRAMES                 |
  * ==========================================
  */
@@ -165,6 +172,7 @@ extern texture frame_car;
  * |              ANIMATION                 |
  * ==========================================
  */
+enum _ARROW_STATE {PLAY=16, SCORE=24} ARROW_STATE;
 
 void init_splash();
 void draw_menu();
