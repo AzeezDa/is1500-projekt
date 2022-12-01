@@ -261,7 +261,7 @@ extern npc_car npcs[CARS_AMOUNT];
  * ==========================================
  */
 void display_scoreboard();
-
+void add_score(char *, int);
 
 
 /* ==========================================
