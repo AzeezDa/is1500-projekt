@@ -18,6 +18,12 @@ int main()
     // Initiate states
     GAME_STATE = MENU;
     ARROW_STATE = PLAY;
+    UNDERSCORE_STATE = FIRST;
+
+    // Keeping track of frame transitions
+    int transition_timer;
+    // Button pressing delay
+    int button_delay = TICKS;
 
     while (1)
     {
@@ -41,8 +47,17 @@ int main()
                 case SCOREBOARD:
                     display_scoreboard();
                     break;
+                case TRANSITION:
+                    // Transitioning screen
+                    if(TICKS - transition_timer <= 3000) 
+                    {
+                        death_transition();
+                    } else {
+                        GAME_STATE = DEATH;
+                    }
+                    break;
                 case DEATH:
-                    // Todo
+                    display_game_over();
                     break;
             }
 
@@ -90,15 +105,45 @@ int main()
                 if (i.b3)
                     turn_car(car.turn_speed);
 
-                if (car.pos._1 < 4.0 || car.pos._1 > 110.0 || update_npc())
-                    GAME_STATE = 0;
+                if (car.pos._1 < 4.0 || car.pos._1 > 110.0 || update_npc()) {
+                    transition_timer = TICKS;
+                    GAME_STATE = TRANSITION;
+                }
                 break;
             case SCOREBOARD:
                 if (i.b1)
                     GAME_STATE = MENU;
                 break;
             case DEATH:
-                // Todo
+                if(i.b1)
+                    GAME_STATE = SCOREBOARD;
+                if(i.b2) 
+                {        
+                    // Delay 
+                    if((TICKS-button_delay)<300) 
+                    {
+                        continue;
+                    }
+                    // Reset delay
+                    button_delay = TICKS;                
+                    if(UNDERSCORE_STATE == FIRST) 
+                    {
+                        UNDERSCORE_STATE = SECOND;
+                    } 
+                    else if(UNDERSCORE_STATE == SECOND) 
+                    {
+                        UNDERSCORE_STATE = THIRD;
+                    } 
+                    else 
+                    {
+                        UNDERSCORE_STATE = FIRST;
+                    }   
+                    button_delay = TICKS; 
+                }
+                if(i.b3)
+                    next_letter(1);
+                if(i.b4)
+                    next_letter(-1);
                 break;
         }
 
