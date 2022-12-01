@@ -68,18 +68,8 @@ int main()
         /**
          *  IN GAME
          */
-        if (fabs(current_curve._1) > 0.1)
-        {
-            if (current_curve._1 > 0.0)
-                turn_car(-car.turn_speed * current_curve._1);
-            if (current_curve._1 < 0.0)
-                turn_car(-car.turn_speed * current_curve._1);
-        }
 
-        if (i.b4)
-            turn_car(-car.turn_speed);
-        if (i.b3)
-            turn_car(car.turn_speed);
+        update_player(i);
 
         if (car.pos._1 < 4.0 || car.pos._1 > 110.0 || update_npc())
             GAME_STATE = 0;

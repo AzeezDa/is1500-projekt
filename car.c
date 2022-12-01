@@ -5,23 +5,26 @@ npc_car npcs[CARS_AMOUNT];
 // Player's car.. VROOM VROOM
 Car car;
 
+#define ACCELERATION 0.00002f
+#define FRICTION 0.000005f
+
 // Inits the npcars with a random position and speed
 void init_npcs()
 {
     int i;
     for (i = 0; i < CARS_AMOUNT; i++)
     {
-        npcs[i].texture = &frame1; // Smallest car texture
-        npcs[i].speed = UFRAND * 0.0008f + 0.001f;
-        npcs[i].speed *= CARS_AMOUNT;
+        npcs[i].texture = &frame1;                  // Smallest car texture
+        npcs[i].speed = UFRAND * 0.0003f + 0.0005f; // Might need fine tuning
+        npcs[i].speed *= CARS_AMOUNT;               // More cars on the road increase speed to handle the loses in clock cycles
 
         // Random deviation from center line in [-20, 20]
-        npcs[i].lane =  rand() % 40 - 20;
+        npcs[i].lane = rand() % 40 - 20;
         npcs[i].pos._1 = 0.0;
 
-        // Negative position outside the screen. It gives some interval between each incoming car rather 
+        // Negative position outside the screen. It gives some interval between each incoming car rather
         // than immediately spawning a new one after it exits from bottom
-        npcs[i].pos._2 = -50.0; 
+        npcs[i].pos._2 = -50.0;
     }
 }
 
@@ -38,14 +41,8 @@ UBYTE update_npc()
 {
     int i;
     for (i = 0; i < CARS_AMOUNT; i++)
-    {   
-        
+    {
         npcs[i].pos._2 += npcs[i].speed;
-
-        // Adding this will flucuate the clock cycles / main loop making the speed of other things faster
-        // TODO: FIX WITH DELTA TIME?
-        // if (npcs[i].pos._2 < 0.0)
-        //     continue;
 
         // Calculate deviation from center using cubic interpolation (same as in the road)
         float persp = PERSPECTIVE_CONSTANT + npcs[i].pos._2 / SCREEN_Y_MAX;
@@ -59,7 +56,7 @@ UBYTE update_npc()
 
         // Update texture based on closeness to bottom of screen
         // BIG CAR
-        if (npcs[i].pos._2 > 16.0) 
+        if (npcs[i].pos._2 > 16.0)
         {
             // Back view
             npcs[i].texture = &frame3;
@@ -79,14 +76,14 @@ UBYTE update_npc()
 
         // If car exists the screen generate new values for it
         if (npcs[i].pos._2 > 32.0)
-        {      
+        {
             // Generate new random distance and clamp it due to some bug :(
             npcs[i].pos._2 = UFRAND * -100.0;
 
-            npcs[i].speed = UFRAND * 0.0008f + 0.001f;
+            npcs[i].speed = UFRAND * 0.0003f + 0.0005f;
             npcs[i].speed *= CARS_AMOUNT;
 
-            npcs[i].texture = &frame1; 
+            npcs[i].texture = &frame1;
             npcs[i].lane = rand() % 40 - 20;
         }
     }
@@ -99,7 +96,32 @@ void init_player()
     car.pos._1 = 60;
     car.pos._2 = 23;
     car.turn_speed = 0.004f * CARS_AMOUNT;
+    car.speed = 0.0005f * CARS_AMOUNT; // Might need fine-tuning
     car.texture = &frame_car;
+}
+
+void update_player(const inputs i) // Inlineable?
+{
+    if (fabs(current_curve._1) > 0.1)
+    {
+        if (current_curve._1 > 0.0)
+            turn_car(-car.turn_speed * current_curve._1);
+        if (current_curve._1 < 0.0)
+            turn_car(-car.turn_speed * current_curve._1);
+    }
+
+    if (i.b4)
+        turn_car(-car.turn_speed);
+    if (i.b3)
+        turn_car(car.turn_speed);
+    if (i.b2)
+        car.speed += ACCELERATION * CARS_AMOUNT;
+    if (i.b1)
+        car.speed -= ACCELERATION * CARS_AMOUNT;
+
+    car.speed -= FRICTION * CARS_AMOUNT;
+
+    car.speed = clamp(car.speed, 0.0, PLAYER_MAX_SPEED * CARS_AMOUNT);
 }
 
 // Turns (in the x direction) the car into the given velocity
