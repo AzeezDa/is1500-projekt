@@ -61,47 +61,38 @@ void next_letter(int sign)
 {
     if(UNDERSCORE_STATE == FIRST) 
     {
-        if(name[0] > 'Z' + 1) 
+        name[0] += sign;
+        if(name[0] > 'Z') 
         {
             name[0] = 'A';
         }
-        else if (name[0] <= 'A' - 1) 
+        else if (name[0] <= 'A') 
         {
             name[0] = 'Z';
-        }
-        else 
-        {
-            name[0] += sign;
         }
     } 
     else if(UNDERSCORE_STATE == SECOND) 
     {
-        if(name[2] > 'Z' + 1) 
+        name[2] += sign;
+        if(name[2] > 'Z') 
         {
             name[2] = 'A';
         }
-        else if (name[2] < 'A' - 1) 
+        else if (name[2] <= 'A') 
         {
             name[2] = 'Z';
-        }
-        else 
-        {
-            name[2] += sign;
         }
     } 
     else 
     {
-        if(name[4] > 'Z' + 1) 
+        name[4] += sign;
+        if(name[4] > 'Z') 
         {
             name[4] = 'A';
         }
-        else if (name[4] < 'A' - 1) 
+        else if (name[4] <= 'A') 
         {
             name[4] = 'Z';
-        }
-        else 
-        {
-            name[4] += sign;
         }
     }   
 }
