@@ -5,14 +5,22 @@ npc_car npcs[CARS_AMOUNT];
 // Player's car.. VROOM VROOM
 Car car;
 
-#define PENDING_TARGET_LANE -1000000.0f
+// Constants used for generating random npc lane changing
+#define PENDING_TARGET_LANE -100000.0f
 #define NO_TARGET_LANE -200000.0f
 
 // Tuneable constants
 #define ACCELERATION 0.00002f
 #define FRICTION 0.000005f
-#define NPC_LANE_SWITCH_RATIO 10 // 1/10 npcs change cars
+#define CAR_TURN_SPEED 0.004f
+#define NPC_SPEED_LOWER 0.0003f // Also initial speed of player's car
+#define NPC_SPEED_UPPER 0.0008f
+#define NPC_LANE_SWITCH_RATIO 10 // 1/10 npcs change lanes
 #define LANE_CHANGING_SPEED 0.05f
+
+// Misc constants
+#define SPEEDOMETER_BASE (~0x7F)
+
 
 // Inits the npcars with a random position and speed
 void init_npcs()
@@ -21,7 +29,7 @@ void init_npcs()
     for (i = 0; i < CARS_AMOUNT; i++)
     {
         npcs[i].texture = &frame1;                  // Smallest car texture
-        npcs[i].speed = UFRAND * 0.0003f + 0.0005f; // Might need fine tuning
+        npcs[i].speed = UFRAND * NPC_SPEED_LOWER + (NPC_SPEED_UPPER - NPC_SPEED_LOWER); // Might need fine tuning
         npcs[i].speed *= CARS_AMOUNT;               // More cars on the road increase speed to handle the loses in clock cycles
 
         // Random deviation from center line in [-30, 30]
@@ -105,10 +113,10 @@ UBYTE update_npc()
         // If car exists the screen generate new values for it
         if (npcs[i].pos._2 > 32.0)
         {
-            // Generate new random distance and clamp it due to some bug :(
+            // Generate new random distance
             npcs[i].pos._2 = UFRAND * -100.0;
 
-            npcs[i].speed = UFRAND * 0.0003f + 0.0005f;
+            npcs[i].speed = UFRAND * NPC_SPEED_LOWER + (NPC_SPEED_UPPER - NPC_SPEED_LOWER);
             npcs[i].speed *= CARS_AMOUNT;
 
             npcs[i].texture = &frame1;
@@ -123,33 +131,48 @@ void init_player()
 {
     car.pos._1 = 60;
     car.pos._2 = 23;
-    car.turn_speed = 0.004f * CARS_AMOUNT;
-    car.speed = 0.0005f * CARS_AMOUNT; // Might need fine-tuning
+    car.turn_speed = CAR_TURN_SPEED * CARS_AMOUNT;
+    car.speed = NPC_SPEED_LOWER * CARS_AMOUNT; // Might need fine-tuning
     car.texture = &frame_car;
 }
 
+// Updates the player car. Includes curve inertia, steering, accelerating, braking, friction and speedometer
 void update_player(const inputs i) // Inlineable?
-{
+{   
+    // When car moves slow, it also steers slower
+    const float steer_modulation = min(1.0, PLAYER_SPEED_RATIO * 2.0);
+
+    // Simulate inertia by moving the car sideways when curving
     if (fabs(current_curve._1) > 0.1)
     {
         if (current_curve._1 > 0.0)
-            turn_car(-car.turn_speed * current_curve._1);
+            turn_car(-car.turn_speed * current_curve._1 * steer_modulation);
         if (current_curve._1 < 0.0)
-            turn_car(-car.turn_speed * current_curve._1);
+            turn_car(-car.turn_speed * current_curve._1 * steer_modulation);
     }
 
+    // Sideways steering
     if (i.b4)
-        turn_car(-car.turn_speed);
+        turn_car(-car.turn_speed * steer_modulation);
     if (i.b3)
-        turn_car(car.turn_speed);
+        turn_car(car.turn_speed * steer_modulation);
+
+    // Forward speed
     if (i.b2)
         car.speed += ACCELERATION * CARS_AMOUNT;
     if (i.b1)
         car.speed -= ACCELERATION * CARS_AMOUNT;
 
+    // Reduce speed if player is not accelerating
     car.speed -= FRICTION * CARS_AMOUNT;
 
+    // Clamp the speed to [0, MAX]
     car.speed = clamp(car.speed, 0.0, PLAYER_MAX_SPEED * CARS_AMOUNT);
+
+    // Simulate speedometer on chip leds
+    char speedometer = SPEEDOMETER_BASE >> (BYTE)(7 * PLAYER_SPEED_RATIO);
+    leds l = {speedometer};
+    set_leds(l);
 }
 
 // Turns (in the x direction) the car into the given velocity

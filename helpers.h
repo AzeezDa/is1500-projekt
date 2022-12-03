@@ -57,6 +57,8 @@ void oled_init();
 
 // Random float in [0, 1]
 #define UFRAND ((float)rand() / (float)RAND_MAX)
+#define min(a,b) (((a) < (b)) ? (a) : (b))
+#define max(a,b) (((a) > (b)) ? (a) : (b))
 
 // 32-bit float 2D Vector
 typedef union _vec2
