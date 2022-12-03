@@ -55,7 +55,9 @@ void add_score(char *name, int points)
             scores[i].points = points;
             for(j = 0; j < 3; j++) 
             {
-                scores[i].name[j] = name[j];
+                // IMPORTANT: the global name variable has spaces
+                // between each letter, therefore we pick name[0], name[2], name[4]
+                scores[i].name[j] = name[j*2]; 
             }
             break;
         }

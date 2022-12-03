@@ -25,6 +25,9 @@ int main()
     // Button pressing delay
     int button_delay = TICKS;
 
+    int score[4] = {10, 30, 20, 25};
+    int index = 0;
+
     while (1)
     {
         // FIXED TIME UPDATE ROUTINE
@@ -49,9 +52,11 @@ int main()
                     break;
                 case TRANSITION:
                     // Transitioning screen
-                    if(TICKS - transition_timer <= 3000) 
+                    if(TICKS - transition_timer <= 2500) 
                     {
                         death_transition();
+                        UNDERSCORE_STATE = FIRST;
+
                     } else {
                         GAME_STATE = DEATH;
                     }
@@ -84,11 +89,39 @@ int main()
                 // Move arrow
                 if (i.b3)
                 {
-                    ARROW_STATE = SCORE;
+                    // Delay 
+                    if((TICKS-button_delay)<300) 
+                    {
+                        continue;
+                    }
+                    // Reset delay
+                    button_delay = TICKS; 
+                    if(ARROW_STATE == SCORE) 
+                    {
+                        ARROW_STATE = PLAY;
+                    } 
+                    else 
+                    {
+                        ARROW_STATE = SCORE;
+                    }
                 }
                 if (i.b4)
                 {
-                    ARROW_STATE = PLAY;
+                    // Delay 
+                    if((TICKS-button_delay)<300) 
+                    {
+                        continue;
+                    }
+                    // Reset delay
+                    button_delay = TICKS; 
+                    if(ARROW_STATE == PLAY) 
+                    {
+                        ARROW_STATE = SCORE;
+                    } 
+                    else 
+                    {
+                        ARROW_STATE = PLAY;
+                    }
                 }
                 break;
             case GAME:
@@ -116,7 +149,8 @@ int main()
                 break;
             case DEATH:
                 if(i.b1) {
-                    save_score(100);
+                    add_score(name, 100); // PLACEHOLDER SCORE
+                    reset_name();
                     GAME_STATE = SCOREBOARD;
                 }
 

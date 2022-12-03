@@ -97,14 +97,10 @@ void next_letter(int sign)
     }   
 }
 
-void save_score(int points) 
+void reset_name() 
 {
     int i;
-    char username[4];
     for(i = 0; i < 3; i++) {
-        username[i] = name[i*2];
         name[i*2] = 'A';
     }
-    add_score(username, points);
-    
 }
