@@ -24,10 +24,7 @@ int main()
     int transition_timer;
     // Button pressing delay
     int button_delay = TICKS;
-
-    int score[4] = {10, 30, 20, 25};
-    int index = 0;
-
+    
     while (1)
     {
         // FIXED TIME UPDATE ROUTINE
