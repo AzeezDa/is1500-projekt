@@ -9,7 +9,9 @@ typedef struct _underscore
 } Underscore;
 Underscore underscore = {{0x01, 0x01, 0x01, 0x01, 0x01}, LETTER_HEIGHT*4+2};
 char name[6] = {'A', ' ', 'A', ' ', 'A', '\0'};
-
+/**
+ * Draws the underscore under every letter when picking name.
+ */
 void draw_underscore()
 {
     int i, j;
@@ -28,6 +30,9 @@ void draw_underscore()
     }
 }
 
+/**
+ * A white noise transitioning screen between game and game over.
+ */
 void death_transition() 
 {
     UBYTE pix;
@@ -43,6 +48,9 @@ void death_transition()
     }
 }
 
+/**
+ * Displays the game over screen.
+ */
 void display_game_over() 
 {
     int score = 100; // JUST AN EXAMPLE
@@ -57,6 +65,11 @@ void display_game_over()
     draw_underscore();
 }
 
+/**
+ * Increments or decrements the char depending on sign, which changes the letter accordingly.
+ * 
+ * @param sign amount of steps you want to change the letter
+ */
 void next_letter(int sign)
 {
     if(UNDERSCORE_STATE == FIRST) 
