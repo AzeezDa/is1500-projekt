@@ -30,9 +30,12 @@ void init_npcs()
     int i;
     for (i = 0; i < CARS_AMOUNT; i++)
     {
-        npcs[i].texture = &frame1;                  // Smallest car texture
-        npcs[i].speed = UFRAND * NPC_SPEED_LOWER + (NPC_SPEED_UPPER - NPC_SPEED_LOWER); // Might need fine tuning
-        npcs[i].speed *= -CARS_AMOUNT;               // More cars on the road increase speed to handle the loses in clock cycles
+        // Smallest car texture
+        npcs[i].texture = &frame1;                  
+        // Might need fine tuning
+        npcs[i].speed = UFRAND * NPC_SPEED_LOWER + (NPC_SPEED_UPPER - NPC_SPEED_LOWER); 
+        // More cars on the road increase speed to handle the loses in clock cycles. Negative to make cars move forward by standard
+        npcs[i].speed *= -CARS_AMOUNT;               
 
         // Random deviation from center line in [-30, 30]
         npcs[i].lane = UFRAND * 60.0 - 30.0;
@@ -59,7 +62,7 @@ UBYTE update_npc()
     int i;
     for (i = 0; i < CARS_AMOUNT; i++)
     {
-        npcs[i].pos._2 += npcs[i].speed + car.speed; // If the player moves fast, then npcs move faster from player POV (RELATIVITY BABY!!)
+        npcs[i].pos._2 += npcs[i].speed + car.speed; // Move cars relative to player
 
         // Calculate deviation from center using cubic interpolation (same as in the road)
         float persp = PERSPECTIVE_CONSTANT + min(npcs[i].pos._2 / SCREEN_Y_MAX, 1.0);
@@ -110,27 +113,29 @@ UBYTE update_npc()
         if (20.0 < npcs[i].pos._2 && npcs[i].pos._2 < 33.0 && fabs(npcs[i].pos._1 - car.pos._1) < 14.0)
             return 1;
 
-        // Have cars from behind always spawn not directly behind car
+        // Have cars from behind always spawn not directly behind car.
         if (npcs[i].pos._2 > 34.0) {
             float diff_to_center = car.pos._1 - SCREEN_X_MAX / 2.0;
-            
+            // Spawn npc from bottom based on player's distance from center line
             if (diff_to_center > 0.0)
                 npcs[i].lane = -30.0 + diff_to_center * UFRAND;
             else
                 npcs[i].lane = 30.0 + diff_to_center * UFRAND;
 
-            npcs[i].target_lane = PENDING_TARGET_LANE;
+            npcs[i].target_lane = PENDING_TARGET_LANE; // Avoids car changing lane.. Maybe removeable
         }
 
         // If car exists the screen generate new values for it
         if (npcs[i].pos._2 > 50.0 || npcs[i].pos._2 < -20.0)
         {
-            // Generate new random distance
+            // Spawn car from bottom or top based on if npcs move slower than player.
+            // I.e. If they dissappear from bottom, they spawn from top and vice versa
             if (npcs[i].speed + car.speed > 0)
                 npcs[i].pos._2 = UFRAND * -20.0;
             else
                 npcs[i].pos._2 = 40.0 + UFRAND * 10.0;
 
+            // Generate new lane and reactivate lane changing ability
             npcs[i].speed = UFRAND * NPC_SPEED_LOWER + (NPC_SPEED_UPPER - NPC_SPEED_LOWER);
             npcs[i].speed *= -CARS_AMOUNT;
             npcs[i].target_lane = PENDING_TARGET_LANE;
