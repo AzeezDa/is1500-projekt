@@ -11,6 +11,7 @@ v2 current_curve = {0.0, 200.0};
 // Store current road curve to allow interpolation
 float road_curve = 0.0;
 
+
 // Sets the road's curvature settings to default (0, 200)
 void init_road()
 {
@@ -22,10 +23,10 @@ void init_road()
 void update_road()
 {
     // Reduce from the curve length to emulate going through the turn
-    current_curve._2 -= 0.3;
+    current_curve._2 -= 0.3 * PLAYER_SPEED_RATIO;
 
     // Transition to next target curve from current curve
-    float curve_diff = (current_curve._1 - road_curve) * 0.03;
+    float curve_diff = (current_curve._1 - road_curve) * 0.03 * PLAYER_SPEED_RATIO;
     road_curve += curve_diff;
 
     // Turn is finished, generate a new one!
@@ -42,7 +43,6 @@ void update_road()
 
 void draw_road()
 {
-
     // Interpolation per height. Basically skew the road based on height and curve amount.
     // There are X0, X1 for each value because they draw a line and each value is for line's two points
 
@@ -52,6 +52,10 @@ void draw_road()
 
     int   center    = mid * SCREEN_X_MAX,
           dx        = ROAD_WIDTH * persp;
+
+    // Based on the distance traveled create an index that is used to mark every fourth line segment and the one after it
+    int center_index0 = (int)distance_traveled % 4,
+        center_index1 = (center_index0 + 1) % 4;
 
     // The road is segmented into 32/4 = 8 lines
     int i, j;
@@ -71,6 +75,11 @@ void draw_road()
 
         draw_line(center + dx, j - 4, 
                   center1 + dx1, j);
+
+        // Draw line segements that are in the correct index
+        int imod4 = i % 4;
+        if (center_index0 == imod4 || center_index1 == imod4)
+            draw_line(center, j - 4, center1, j);
 
         // Store current point for next line
         persp = persp1;

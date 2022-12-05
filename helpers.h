@@ -57,6 +57,8 @@ void oled_init();
 
 // Random float in [0, 1]
 #define UFRAND ((float)rand() / (float)RAND_MAX)
+#define min(a,b) (((a) < (b)) ? (a) : (b))
+#define max(a,b) (((a) > (b)) ? (a) : (b))
 
 // 32-bit float 2D Vector
 typedef union _vec2
@@ -69,7 +71,8 @@ typedef union _vec2
 } v2;
 
 const v2 VZERO;
-float fabs(float);
+float fabs(const float);
+float clamp(const float, const float, const float);
 
 /* ==========================================
  * |               PAINTER                  |
@@ -188,6 +191,9 @@ void draw(v2, const texture *);
 // Amount of total cars in on the road
 #define CARS_AMOUNT 2
 
+#define PLAYER_MAX_SPEED 0.005f
+#define PLAYER_SPEED_RATIO (car.speed / PLAYER_MAX_SPEED)
+
 // Controls how wide the perspective is
 #define PERSPECTIVE_CONSTANT 0.3f
 
@@ -199,7 +205,8 @@ typedef struct _npc_car
 {
     v2 pos;
     float speed;
-    BYTE lane; // Deviation from the center line of the road
+    float lane; // Deviation from the center line of the road
+    float target_lane; // Lane that the car will switch to
     texture *texture;
 } npc_car;
 
@@ -208,6 +215,7 @@ typedef struct _player_car
 {
     v2 pos;
     float turn_speed;
+    float speed;
     texture *texture;
 } Car;
 
@@ -217,11 +225,13 @@ void init_player();
 
 UBYTE update_npc();
 inline void turn_car(const float);
+void update_player(const inputs i);
 
 extern v2 current_curve;
 extern float road_curve;
 extern Car car;
 extern npc_car npcs[CARS_AMOUNT];
+extern float distance_traveled;
 
 /* ==========================================
  * |              GAME OVER                 |
