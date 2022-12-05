@@ -53,7 +53,7 @@ void death_transition()
  */
 void display_game_over() 
 {
-    int score = 100; // JUST AN EXAMPLE
+    int score = distance_traveled;
     v2 pos = {GAMEOVER_X, 0.0};
     prints("GAME OVER", pos);
     pos._1 = 0.0;
