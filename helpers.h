@@ -146,6 +146,13 @@ inputs get_inputs();
 inline void set_leds(leds);
 
 /* ==========================================
+ * |                GAME STATE              |
+ * ==========================================
+ */
+
+enum _GAME_STATE {MENU, GAME, SCOREBOARD, DEATH, TRANSITION} GAME_STATE;
+
+/* ==========================================
  * |                 FRAMES                 |
  * ==========================================
  */
@@ -168,6 +175,7 @@ extern texture frame_car;
  * |              ANIMATION                 |
  * ==========================================
  */
+enum _ARROW_STATE {PLAY=16, SCORE=24} ARROW_STATE;
 
 void init_splash();
 void draw_menu();
@@ -224,6 +232,17 @@ extern float road_curve;
 extern Car car;
 extern npc_car npcs[CARS_AMOUNT];
 extern float distance_traveled;
+
+/* ==========================================
+ * |              GAME OVER                 |
+ * ==========================================
+ */
+enum _UNDERSCORE_STATES {FIRST=60, SECOND=72, THIRD=84} UNDERSCORE_STATE;
+void display_game_over();
+void death_transition();
+void next_letter(int);
+void reset_name();
+extern char name[6];
 
 /* ==========================================
  * |                SCORE                   |

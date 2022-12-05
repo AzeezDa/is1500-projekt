@@ -5,9 +5,8 @@ typedef struct _arrow
 {
     UBYTE arrow[3];
     UBYTE x;
-    UBYTE y;
 } Arrow;
-Arrow arrow = {{0x1f, 0x0e, 0x04}, 36, 16};
+Arrow arrow = {{0x1f, 0x0e, 0x04}, 36};
 // Draws the arrow on the screen based on its choice
 void draw_arrow()
 {
@@ -18,9 +17,9 @@ void draw_arrow()
         for (j = 0; j < 5; j++)
         {
             if (col & 1)
-                pixon(arrow.x + i, arrow.y + j);
+                pixon(arrow.x + i, ARROW_STATE + j);
             else
-                pixoff(arrow.x + i, arrow.y + j);
+                pixoff(arrow.x + i, ARROW_STATE + j);
 
             col = col >> 1;
         }
@@ -29,23 +28,14 @@ void draw_arrow()
 
 void arrow_up()
 {
-    arrow.y = 16;
+    ARROW_STATE = PLAY;
 }
 
 void arrow_down()
 {
-    arrow.y = 24;
+    ARROW_STATE = SCORE;
 }
 
-// 0 is play, 1 is score
-BYTE arrow_state()
-{
-    if (arrow.y == 16)
-    {
-        return 0x0;
-    }
-    return 0x1;
-}
 
 /*
     FRAMES OF THE SPLASH SCREEN
