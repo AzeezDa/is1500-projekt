@@ -223,6 +223,7 @@ extern v2 current_curve;
 extern float road_curve;
 extern Car car;
 extern npc_car npcs[CARS_AMOUNT];
+extern float distance_traveled;
 
 /* ==========================================
  * |                SCORE                   |

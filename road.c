@@ -11,7 +11,6 @@ v2 current_curve = {0.0, 200.0};
 // Store current road curve to allow interpolation
 float road_curve = 0.0;
 
-float distance_traveled = 0.0;
 
 // Sets the road's curvature settings to default (0, 200)
 void init_road()

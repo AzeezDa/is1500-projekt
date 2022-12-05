@@ -5,21 +5,23 @@ npc_car npcs[CARS_AMOUNT];
 // Player's car.. VROOM VROOM
 Car car;
 
+float distance_traveled = 0.0;
+
 // Constants used for generating random npc lane changing
 #define PENDING_TARGET_LANE -100000.0f
 #define NO_TARGET_LANE -200000.0f
 
 // Tuneable constants
-#define ACCELERATION 0.00002f
-#define FRICTION 0.000005f
+#define ACCELERATION 0.00000002f
+#define FRICTION 0.00000001f
 #define CAR_TURN_SPEED 0.004f
 #define NPC_SPEED_LOWER 0.0003f // Also initial speed of player's car
 #define NPC_SPEED_UPPER 0.0008f
-#define NPC_LANE_SWITCH_RATIO 10 // 1/10 npcs change lanes
-#define LANE_CHANGING_SPEED 0.05f
+#define NPC_LANE_SWITCH_RATIO 3 // 1/10 npcs change lanes
+#define LANE_CHANGING_SPEED 0.00005f
 
 // Misc constants
-#define SPEEDOMETER_BASE (~0x7F)
+#define SPEEDOMETER_BASE (~0x7FF)
 
 
 // Inits the npcars with a random position and speed
@@ -83,7 +85,7 @@ UBYTE update_npc()
             else
                 npcs[i].target_lane = NO_TARGET_LANE; // If no succeed, never change lane for this NPC 
         }
-        else if (npcs[i].target_lane != NO_TARGET_LANE || npcs[i].target_lane != PENDING_TARGET_LANE)
+        else if (npcs[i].target_lane != NO_TARGET_LANE && npcs[i].target_lane != PENDING_TARGET_LANE)
         {
             // Interpolate change from current to target
             float lane_diff = (npcs[i].target_lane - npcs[i].lane) * LANE_CHANGING_SPEED * CARS_AMOUNT;
@@ -118,6 +120,7 @@ UBYTE update_npc()
 
             npcs[i].speed = UFRAND * NPC_SPEED_LOWER + (NPC_SPEED_UPPER - NPC_SPEED_LOWER);
             npcs[i].speed *= CARS_AMOUNT;
+            npcs[i].target_lane = PENDING_TARGET_LANE;
 
             npcs[i].texture = &frame1;
             npcs[i].lane = rand() % 40 - 20;
@@ -168,10 +171,12 @@ void update_player(const inputs i) // Inlineable?
 
     // Clamp the speed to [0, MAX]
     car.speed = clamp(car.speed, 0.0, PLAYER_MAX_SPEED * CARS_AMOUNT);
+    distance_traveled += car.speed;
 
     // Simulate speedometer on chip leds
-    char speedometer = SPEEDOMETER_BASE >> (BYTE)(7 * PLAYER_SPEED_RATIO);
-    leds l = {speedometer};
+    int speedometer_full = SPEEDOMETER_BASE >> (int)(8 * PLAYER_SPEED_RATIO);
+    leds l;
+    l._all = speedometer_full & 0xFF;
     set_leds(l);
 }
 
