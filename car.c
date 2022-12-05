@@ -32,7 +32,7 @@ void init_npcs()
     {
         npcs[i].texture = &frame1;                  // Smallest car texture
         npcs[i].speed = UFRAND * NPC_SPEED_LOWER + (NPC_SPEED_UPPER - NPC_SPEED_LOWER); // Might need fine tuning
-        npcs[i].speed *= CARS_AMOUNT;               // More cars on the road increase speed to handle the loses in clock cycles
+        npcs[i].speed *= -CARS_AMOUNT;               // More cars on the road increase speed to handle the loses in clock cycles
 
         // Random deviation from center line in [-30, 30]
         npcs[i].lane = UFRAND * 60.0 - 30.0;
@@ -41,7 +41,7 @@ void init_npcs()
 
         // Negative position outside the screen. It gives some interval between each incoming car rather
         // than immediately spawning a new one after it exits from bottom
-        npcs[i].pos._2 = -50.0;
+        npcs[i].pos._2 = -10.0;
     }
 }
 
@@ -62,7 +62,7 @@ UBYTE update_npc()
         npcs[i].pos._2 += npcs[i].speed + car.speed; // If the player moves fast, then npcs move faster from player POV (RELATIVITY BABY!!)
 
         // Calculate deviation from center using cubic interpolation (same as in the road)
-        float persp = PERSPECTIVE_CONSTANT + npcs[i].pos._2 / SCREEN_Y_MAX;
+        float persp = PERSPECTIVE_CONSTANT + min(npcs[i].pos._2 / SCREEN_Y_MAX, 1.0);
         float inv_persp = 1.0 - persp;
         float mid = 0.5 + road_curve * inv_persp * inv_persp * inv_persp;
         float center = mid * SCREEN_X_MAX;
@@ -72,7 +72,7 @@ UBYTE update_npc()
         npcs[i].pos._1 = center + dx;
 
         // Lane changing of NPCars
-        if (npcs[i].pos._2 > UFRAND * 10.0f && npcs[i].target_lane == PENDING_TARGET_LANE) // If within [0, 10] and still able to change lane, try to change lane
+        if (6.0 * UFRAND < npcs[i].pos._2 && npcs[i].pos._2 < 10.0 + 6.0 * UFRAND && npcs[i].target_lane == PENDING_TARGET_LANE) // If within [0, 10] and still able to change lane, try to change lane
         {
             if (rand() % NPC_LANE_SWITCH_RATIO == 0) // Randomly choose to change lane
             {
@@ -93,33 +93,46 @@ UBYTE update_npc()
         }
 
         // Update texture based on closeness to bottom of screen
-        // BIG CAR
-        if (npcs[i].pos._2 > 16.0)
-        {
-            // Back view
-            npcs[i].texture = &frame3;
-
-            // Display side ways view of car based on curvature
-            if (current_curve._1 > 0.2)
-                npcs[i].texture = &frame3_l;
-            else if (current_curve._1 < -0.2)
-                npcs[i].texture = &frame3_r;
-        }
-        else if (npcs[i].pos._2 > 10.0) // MEDIUM
+        if (npcs[i].pos._2 < 10.0)
+            npcs[i].texture = &frame1;
+        else if (npcs[i].pos._2 < 16.0)
             npcs[i].texture = &frame2;
+        else {
+            if (road_curve > 0.2)
+                npcs[i].texture = &frame3_l;
+            else if (road_curve < -0.2)
+                npcs[i].texture = &frame3_r;
+            else
+                npcs[i].texture = &frame3;
+        }
 
         // Return 1 if cars overlap
-        if (npcs[i].pos._2 > 20.0 && fabs(npcs[i].pos._1 - car.pos._1) < 14.0)
+        if (20.0 < npcs[i].pos._2 && npcs[i].pos._2 < 33.0 && fabs(npcs[i].pos._1 - car.pos._1) < 14.0)
             return 1;
 
+        // Have cars from behind always spawn not directly behind car
+        if (npcs[i].pos._2 > 34.0) {
+            float diff_to_center = car.pos._1 - SCREEN_X_MAX / 2.0;
+            
+            if (diff_to_center > 0.0)
+                npcs[i].lane = -30.0 + diff_to_center * UFRAND;
+            else
+                npcs[i].lane = 30.0 + diff_to_center * UFRAND;
+
+            npcs[i].target_lane = PENDING_TARGET_LANE;
+        }
+
         // If car exists the screen generate new values for it
-        if (npcs[i].pos._2 > 32.0)
+        if (npcs[i].pos._2 > 50.0 || npcs[i].pos._2 < -20.0)
         {
             // Generate new random distance
-            npcs[i].pos._2 = UFRAND * -100.0;
+            if (npcs[i].speed + car.speed > 0)
+                npcs[i].pos._2 = UFRAND * -20.0;
+            else
+                npcs[i].pos._2 = 40.0 + UFRAND * 10.0;
 
             npcs[i].speed = UFRAND * NPC_SPEED_LOWER + (NPC_SPEED_UPPER - NPC_SPEED_LOWER);
-            npcs[i].speed *= CARS_AMOUNT;
+            npcs[i].speed *= -CARS_AMOUNT;
             npcs[i].target_lane = PENDING_TARGET_LANE;
 
             npcs[i].texture = &frame1;

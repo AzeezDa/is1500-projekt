@@ -183,7 +183,7 @@ void draw(v2, const texture *);
 // Amount of total cars in on the road
 #define CARS_AMOUNT 2
 
-#define PLAYER_MAX_SPEED 0.001f
+#define PLAYER_MAX_SPEED 0.005f
 #define PLAYER_SPEED_RATIO (car.speed / PLAYER_MAX_SPEED)
 
 // Controls how wide the perspective is
