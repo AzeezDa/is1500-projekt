@@ -18,7 +18,13 @@ int main()
     // Initiate states
     GAME_STATE = MENU;
     ARROW_STATE = PLAY;
+    UNDERSCORE_STATE = FIRST;
 
+    // Keeping track of frame transitions
+    int transition_timer;
+    // Button pressing delay
+    int button_delay = TICKS;
+    
     while (1)
     {
         // FIXED TIME UPDATE ROUTINE
@@ -41,8 +47,19 @@ int main()
                 case SCOREBOARD:
                     display_scoreboard();
                     break;
+                case TRANSITION:
+                    // Transitioning screen
+                    if(TICKS - transition_timer <= 2500) 
+                    {
+                        death_transition();
+                        UNDERSCORE_STATE = FIRST;
+
+                    } else {
+                        GAME_STATE = DEATH;
+                    }
+                    break;
                 case DEATH:
-                    // Todo
+                    display_game_over();
                     break;
             }
 
@@ -69,11 +86,39 @@ int main()
                 // Move arrow
                 if (i.b3)
                 {
-                    ARROW_STATE = SCORE;
+                    // Delay 
+                    if((TICKS-button_delay)<300) 
+                    {
+                        continue;
+                    }
+                    // Reset delay
+                    button_delay = TICKS; 
+                    if(ARROW_STATE == SCORE) 
+                    {
+                        ARROW_STATE = PLAY;
+                    } 
+                    else 
+                    {
+                        ARROW_STATE = SCORE;
+                    }
                 }
                 if (i.b4)
                 {
-                    ARROW_STATE = PLAY;
+                    // Delay 
+                    if((TICKS-button_delay)<300) 
+                    {
+                        continue;
+                    }
+                    // Reset delay
+                    button_delay = TICKS; 
+                    if(ARROW_STATE == PLAY) 
+                    {
+                        ARROW_STATE = SCORE;
+                    } 
+                    else 
+                    {
+                        ARROW_STATE = PLAY;
+                    }
                 }
                 break;
             case GAME:
@@ -90,15 +135,69 @@ int main()
                 if (i.b3)
                     turn_car(car.turn_speed);
 
-                if (car.pos._1 < 4.0 || car.pos._1 > 110.0 || update_npc())
-                    GAME_STATE = 0;
+                if (car.pos._1 < 4.0 || car.pos._1 > 110.0 || update_npc()) {
+                    transition_timer = TICKS;
+                    GAME_STATE = TRANSITION;
+                }
                 break;
             case SCOREBOARD:
                 if (i.b1)
                     GAME_STATE = MENU;
                 break;
             case DEATH:
-                // Todo
+                if(i.b1) {
+                    add_score(name, 100); // PLACEHOLDER SCORE
+                    reset_name();
+                    GAME_STATE = SCOREBOARD;
+                }
+
+                if(i.b2) 
+                {        
+                    // Delay 
+                    if((TICKS-button_delay)<300) 
+                    {
+                        continue;
+                    }
+                    // Reset delay
+                    button_delay = TICKS;                
+                    if(UNDERSCORE_STATE == FIRST) 
+                    {
+                        UNDERSCORE_STATE = SECOND;
+                    } 
+                    else if(UNDERSCORE_STATE == SECOND) 
+                    {
+                        UNDERSCORE_STATE = THIRD;
+                    } 
+                    else 
+                    {
+                        UNDERSCORE_STATE = FIRST;
+                    }   
+                    button_delay = TICKS; 
+                }
+                if(i.b3) 
+                {
+                    // Delay 
+                    if((TICKS-button_delay)<300) 
+                    {
+                        continue;
+                    }
+                    // Reset delay
+                    button_delay = TICKS; 
+                    next_letter(1);
+                }
+                    
+                if(i.b4) 
+                {
+                    // Delay 
+                    if((TICKS-button_delay)<300) 
+                    {
+                        continue;
+                    }
+                    // Reset delay
+                    button_delay = TICKS; 
+                    next_letter(-1);
+                }
+
                 break;
         }
 

@@ -147,7 +147,7 @@ inline void set_leds(leds);
  * ==========================================
  */
 
-enum _GAME_STATE {MENU, GAME, SCOREBOARD, DEATH} GAME_STATE;
+enum _GAME_STATE {MENU, GAME, SCOREBOARD, DEATH, TRANSITION} GAME_STATE;
 
 /* ==========================================
  * |                 FRAMES                 |
@@ -222,6 +222,17 @@ extern v2 current_curve;
 extern float road_curve;
 extern Car car;
 extern npc_car npcs[CARS_AMOUNT];
+
+/* ==========================================
+ * |              GAME OVER                 |
+ * ==========================================
+ */
+enum _UNDERSCORE_STATES {FIRST=60, SECOND=72, THIRD=84} UNDERSCORE_STATE;
+void display_game_over();
+void death_transition();
+void next_letter(int);
+void reset_name();
+extern char name[6];
 
 /* ==========================================
  * |                SCORE                   |

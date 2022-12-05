@@ -32,7 +32,7 @@ UBYTE font[3][130] = {
                 {
                 0x3f, 0x23, 0x25, 0x29, 0x3f, // 0
                 0x00, 0x22, 0x3f, 0x20, 0x00, // 1
-                0x22, 0x31, 0x29, 0x25, 0x22, // 2
+                0x3d, 0x25, 0x25, 0x25, 0x27, // 2
                 0x21, 0x21, 0x25, 0x25, 0x3f, // 3
                 0x0c, 0x0a, 0x09, 0x3f, 0x08, // 4
                 0x27, 0x25, 0x25, 0x25, 0x3d, // 5
@@ -49,6 +49,7 @@ UBYTE font[3][130] = {
  * 
  * @param word Our word (or phrase) to print out
  * @param pos Our vec2 containing x and y position
+ * @return v2 x and y position of end of string
  */
 v2 prints(char *word, v2 pos) 
 {
@@ -114,6 +115,7 @@ v2 prints(char *word, v2 pos)
  *
  * @param num Our integer to print out
  * @param pos Our vec2 containing x and y position
+ * @return v2 x and y position of end of string
  */
 v2 printn(int num, v2 pos) 
 {
@@ -156,6 +158,14 @@ v2 printn(int num, v2 pos)
     return prints(subset, pos);
 }
 
+/**
+ * Displays a phrase followed by an integer. There is a space between them.
+ * 
+ * @param word Given string
+ * @param num Given integer
+ * @param pos v2 of position x and y where the string is displayed.
+ * @return v2 x and y position of end of string
+ */
 v2 printsn(char *word, int num, v2 pos) 
 {
     pos = prints(word, pos);
