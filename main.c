@@ -122,18 +122,8 @@ int main()
                 }
                 break;
             case GAME:
-                if (fabs(current_curve._1) > 0.1)
-                {
-                    if (current_curve._1 > 0.0)
-                        turn_car(-car.turn_speed * current_curve._1);
-                    if (current_curve._1 < 0.0)
-                        turn_car(-car.turn_speed * current_curve._1);
-                }
-
-                if (i.b4)
-                    turn_car(-car.turn_speed);
-                if (i.b3)
-                    turn_car(car.turn_speed);
+                update_npc();
+                update_player(i);
 
                 if (car.pos._1 < 4.0 || car.pos._1 > 110.0 || update_npc()) {
                     transition_timer = TICKS;
@@ -146,7 +136,7 @@ int main()
                 break;
             case DEATH:
                 if(i.b1) {
-                    add_score(name, 100); // PLACEHOLDER SCORE
+                    add_score(name, distance_traveled); // PLACEHOLDER SCORE
                     reset_name();
                     GAME_STATE = SCOREBOARD;
                 }
