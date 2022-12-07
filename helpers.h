@@ -176,6 +176,7 @@ extern texture frame_car;
  * ==========================================
  */
 enum _ARROW_STATE {PLAY=16, SCORE=24} ARROW_STATE;
+#define BUTTON_DELAY 500
 
 void init_splash();
 void draw_menu();

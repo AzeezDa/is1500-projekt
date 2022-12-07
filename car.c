@@ -12,11 +12,11 @@ float distance_traveled = 0.0;
 #define NO_TARGET_LANE -200000.0f
 
 // Tuneable constants
-#define ACCELERATION 0.0000001f
-#define FRICTION 0.00000001f
-#define CAR_TURN_SPEED 0.004f
-#define NPC_SPEED_LOWER 0.0003f // Also initial speed of player's car
-#define NPC_SPEED_UPPER 0.0008f
+#define ACCELERATION 0.000001f
+#define FRICTION 0.0000005f
+#define CAR_TURN_SPEED 0.009f
+#define NPC_SPEED_LOWER 0.0005f // Also initial speed of player's car
+#define NPC_SPEED_UPPER 0.001f
 #define NPC_LANE_SWITCH_RATIO 3 // 1/10 npcs change lanes
 #define LANE_CHANGING_SPEED 0.00005f
 

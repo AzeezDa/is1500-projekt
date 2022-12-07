@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include "helpers.h"
 
+
 int main()
 {
     init();
@@ -71,6 +72,7 @@ int main()
         switch(GAME_STATE) {
             case MENU:
                 // Start game
+                srand(TICKS);
                 if (i.b2 && ARROW_STATE == PLAY)
                 {
                     GAME_STATE = GAME;
@@ -87,7 +89,7 @@ int main()
                 if (i.b3)
                 {
                     // Delay 
-                    if((TICKS-button_delay)<300) 
+                    if((TICKS-button_delay)<BUTTON_DELAY) 
                     {
                         continue;
                     }
@@ -145,7 +147,7 @@ int main()
                 if(i.b2) 
                 {        
                     // Delay 
-                    if((TICKS-button_delay)<300) 
+                    if((TICKS-button_delay)<BUTTON_DELAY) 
                     {
                         continue;
                     }
