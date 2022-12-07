@@ -70,9 +70,19 @@ typedef union _vec2
     };
 } v2;
 
+typedef union _tup2
+{
+    int m[2];
+    struct
+    {
+        int _1, _2;
+    };
+} t2;
+
 const v2 VZERO;
 float fabs(const float);
 float clamp(const float, const float, const float);
+t2 calc_persp(const v2);
 
 /* ==========================================
  * |               PAINTER                  |
@@ -170,6 +180,12 @@ extern texture frame3;
 extern texture frame3_l;
 extern texture frame3_r;
 extern texture frame_car;
+extern texture lamp[6];
+extern texture building_1;
+extern texture building_2;
+extern texture tree_f1;
+extern texture tree_f2;
+extern texture tree_f3;
 
 /* ==========================================
  * |              ANIMATION                 |
@@ -263,5 +279,12 @@ void add_score(char *, int);
 v2 prints(char*, v2);
 v2 printn(int, v2);
 v2 printsn(char*, int, v2);
-    
+
+/* ==========================================
+ * |               SCENARY                  |
+ * ==========================================
+ */
+void init_scenary();
+void update_side();
+void draw_side();
 #endif // HELPERS

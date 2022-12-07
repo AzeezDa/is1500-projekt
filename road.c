@@ -46,12 +46,8 @@ void draw_road()
     // Interpolation per height. Basically skew the road based on height and curve amount.
     // There are X0, X1 for each value because they draw a line and each value is for line's two points
 
-    float persp     = PERSPECTIVE_CONSTANT,
-          inv_persp = 1.0 - persp,
-          mid       = 0.5 + road_curve * inv_persp * inv_persp * inv_persp;
-
-    int   center    = mid * SCREEN_X_MAX,
-          dx        = ROAD_WIDTH * persp;
+    v2 pos = {ROAD_WIDTH, 0.0};
+    t2 center_dx0 = calc_persp(pos);
 
     // Based on the distance traveled create an index that is used to mark every fourth line segment and the one after it
     int center_index0 = (int)distance_traveled % 4,
@@ -62,30 +58,22 @@ void draw_road()
     for (i = 0, j = 4; i < 7; i++, j += 4)
     {
         // Calculate new point for current line
-        float persp1     = PERSPECTIVE_CONSTANT + (float)j / SCREEN_Y_MAX,
-              inv_persp1 = 1.0 - persp1,
-              mid1       = 0.5 + road_curve * inv_persp1 * inv_persp1 * inv_persp1;
-
-        int   center1    = mid1 * SCREEN_X_MAX,
-              dx1        = ROAD_WIDTH * persp1;
+        pos._2 = (float)j;
+        t2 center_dx1 = calc_persp(pos);
 
         // Draw left and right sides of the road
-        draw_line(center - dx, j - 4, 
-                  center1 - dx1, j);
+        draw_line(center_dx0._1 - center_dx0._2, j - 4, 
+                  center_dx1._1 - center_dx1._2, j);
 
-        draw_line(center + dx, j - 4, 
-                  center1 + dx1, j);
+        draw_line(center_dx0._1 + center_dx0._2, j - 4, 
+                  center_dx1._1 + center_dx1._2, j);
 
         // Draw line segements that are in the correct index
         int imod4 = i % 4;
         if (center_index0 == imod4 || center_index1 == imod4)
-            draw_line(center, j - 4, center1, j);
+            draw_line(center_dx0._1, j - 4, center_dx1._1, j);
 
         // Store current point for next line
-        persp = persp1;
-        inv_persp = inv_persp1;
-        mid = mid1;
-        center = center1;
-        dx = dx1;
+        center_dx0 = center_dx1;
     }
 }
