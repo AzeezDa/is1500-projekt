@@ -25,6 +25,10 @@ int main()
     int transition_timer;
     // Button pressing delay
     int button_delay = TICKS;
+
+    int menu_led_timer = TICKS;
+    UBYTE led_counter;
+
     
     while (1)
     {
@@ -124,6 +128,14 @@ int main()
                         ARROW_STATE = PLAY;
                     }
                 }
+                if (TICKS - menu_led_timer > LED_DELAY)
+                {
+                    leds l;
+                    l._all = (0x1 << led_counter) | (0x80 >> led_counter);
+                    set_leds(l);
+                    led_counter = (led_counter + 1) % 8;
+                    menu_led_timer = TICKS;
+                }
                 break;
             case GAME:
                 update_npc();
@@ -173,7 +185,7 @@ int main()
                 if(i.b3) 
                 {
                     // Delay 
-                    if((TICKS-button_delay)<300) 
+                    if((TICKS-button_delay) < BUTTON_DELAY) 
                     {
                         continue;
                     }
@@ -185,7 +197,7 @@ int main()
                 if(i.b4) 
                 {
                     // Delay 
-                    if((TICKS-button_delay)<300) 
+                    if((TICKS-button_delay) < BUTTON_DELAY) 
                     {
                         continue;
                     }

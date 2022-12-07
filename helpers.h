@@ -193,6 +193,7 @@ extern texture tree_f3;
  */
 enum _ARROW_STATE {PLAY=16, SCORE=24} ARROW_STATE;
 #define BUTTON_DELAY 500
+#define LED_DELAY 100
 
 void init_splash();
 void draw_menu();
