@@ -43,6 +43,7 @@ int main()
                     draw(car.pos, car.texture);
                     draw_npcs();
                     update_road();
+                    draw_side();
                     draw_road();
                     break;
                 case SCOREBOARD:
@@ -79,6 +80,7 @@ int main()
                     init_player();
                     init_road();
                     init_npcs();
+                    init_scenary();
                 }
                 // Show scoreboard
                 if (i.b2 && ARROW_STATE == SCORE)
@@ -126,6 +128,7 @@ int main()
             case GAME:
                 update_npc();
                 update_player(i);
+                update_side();
 
                 if (car.pos._1 < 4.0 || car.pos._1 > 110.0 || update_npc()) {
                     transition_timer = TICKS;
