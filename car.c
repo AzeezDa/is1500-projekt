@@ -23,7 +23,6 @@ float distance_traveled = 0.0;
 // Misc constants
 #define SPEEDOMETER_BASE (~0x7FF)
 
-
 // Inits the npcars with a random position and speed
 void init_npcs()
 {
@@ -160,6 +159,34 @@ void init_player()
 // Updates the player car. Includes curve inertia, steering, accelerating, braking, friction and speedometer
 void update_player(const inputs i) // Inlineable?
 {   
+
+    float overmax = 0.0;
+    if (i.switches == 0x1) // TURBO LEVEL 1
+        overmax = PLAYER_MAX_SPEED * 4;
+    if (i.switches == 0x3) // TURBO LEVEL 2
+    {
+        overmax = PLAYER_MAX_SPEED * 6;
+        car.turn_speed = CAR_TURN_SPEED * 2;
+    }
+    else
+        car.turn_speed = CAR_TURN_SPEED;
+    
+    if (i.switches == 0x7) // TURBO LEVEL 3
+    {
+        overmax = PLAYER_MAX_SPEED * 8;
+        car.turn_speed = CAR_TURN_SPEED * 4;
+    }
+    else
+        car.turn_speed = CAR_TURN_SPEED;
+    
+    if (i.switches == 0xf) // TURBO LEVEL 3
+    {
+        overmax = PLAYER_MAX_SPEED * 16;
+        car.turn_speed = CAR_TURN_SPEED * 6;
+    }
+    else
+        car.turn_speed = CAR_TURN_SPEED;
+
     // When car moves slow, it also steers slower
     const float steer_modulation = min(1.0, PLAYER_SPEED_RATIO * 2.0);
 
@@ -188,11 +215,12 @@ void update_player(const inputs i) // Inlineable?
     car.speed -= FRICTION * CARS_AMOUNT;
 
     // Clamp the speed to [0, MAX]
-    car.speed = clamp(car.speed, 0.0, PLAYER_MAX_SPEED * CARS_AMOUNT);
+    car.speed = clamp(car.speed, 0.0, PLAYER_MAX_SPEED * CARS_AMOUNT + overmax);
     distance_traveled += car.speed;
 
     // Simulate speedometer on chip leds
     int speedometer_full = SPEEDOMETER_BASE >> (int)(8 * PLAYER_SPEED_RATIO);
+
     leds l;
     l._all = speedometer_full & 0xFF;
     set_leds(l);
