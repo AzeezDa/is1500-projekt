@@ -17,7 +17,7 @@ float distance_traveled = 0.0;
 #define CAR_TURN_SPEED 0.009f
 #define NPC_SPEED_LOWER 0.0005f // Also initial speed of player's car
 #define NPC_SPEED_UPPER 0.001f
-#define NPC_LANE_SWITCH_RATIO 3 // 1/10 npcs change lanes
+#define NPC_LANE_SWITCH_RATIO 5 // 1/5 npcs change lanes
 #define LANE_CHANGING_SPEED 0.0001f
 
 // Misc constants
@@ -134,7 +134,7 @@ UBYTE update_npc()
             // Spawn car from bottom or top based on if npcs move slower than player.
             // I.e. If they dissappear from bottom, they spawn from top and vice versa
             if (npcs[i].speed + car.speed > 0)
-                npcs[i].pos._2 = UFRAND * -20.0;
+                npcs[i].pos._2 = UFRAND * -50.0;
             else
                 npcs[i].pos._2 = 40.0 + UFRAND * 10.0;
 
@@ -144,7 +144,7 @@ UBYTE update_npc()
             npcs[i].target_lane = PENDING_TARGET_LANE;
 
             npcs[i].texture = &frame1;
-            npcs[i].lane = rand() % 40 - 20;
+            npcs[i].lane = UFRAND * 60.0 - 30.0;
         }
     }
 
