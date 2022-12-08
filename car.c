@@ -13,15 +13,19 @@ float distance_traveled = 0.0;
 
 // Tuneable constants
 #define ACCELERATION 0.000001f
-#define FRICTION 0.0000005f
+#define FRICTION 0.0000004f
 #define CAR_TURN_SPEED 0.009f
 #define NPC_SPEED_LOWER 0.0005f // Also initial speed of player's car
 #define NPC_SPEED_UPPER 0.001f
 #define NPC_LANE_SWITCH_RATIO 3 // 1/10 npcs change lanes
-#define LANE_CHANGING_SPEED 0.00005f
+#define LANE_CHANGING_SPEED 0.0001f
 
 // Misc constants
-#define SPEEDOMETER_BASE (~0x7FF)
+#define SPEEDOMETER_BASE (~0x1FF)
+
+UBYTE turbo_leds = 0xFF;
+int turbo_led_timer = 0;
+int turbo_led_delay = 1000;
 
 // Inits the npcars with a random position and speed
 void init_npcs()
@@ -161,31 +165,30 @@ void update_player(const inputs i) // Inlineable?
 {   
 
     float overmax = 0.0;
-    if (i.switches == 0x1) // TURBO LEVEL 1
-        overmax = PLAYER_MAX_SPEED * 4;
-    if (i.switches == 0x3) // TURBO LEVEL 2
+    car.turn_speed = CAR_TURN_SPEED * CARS_AMOUNT;
+    turbo_led_delay = 1000;
+    if (i.switches == 0x1) // Turbo 1
     {
-        overmax = PLAYER_MAX_SPEED * 6;
-        car.turn_speed = CAR_TURN_SPEED * 2;
+        overmax = PLAYER_MAX_SPEED * 2.0;
     }
-    else
-        car.turn_speed = CAR_TURN_SPEED;
-    
-    if (i.switches == 0x7) // TURBO LEVEL 3
+    else if (i.switches == 0x3) // Turbo 2
     {
-        overmax = PLAYER_MAX_SPEED * 8;
-        car.turn_speed = CAR_TURN_SPEED * 4;
+        overmax = PLAYER_MAX_SPEED * 4.0;
+        turbo_led_delay = 500;
+        car.turn_speed *= 2.0;
     }
-    else
-        car.turn_speed = CAR_TURN_SPEED;
-    
-    if (i.switches == 0xf) // TURBO LEVEL 3
+    else if (i.switches == 0x7) // Turbo 3
     {
-        overmax = PLAYER_MAX_SPEED * 16;
-        car.turn_speed = CAR_TURN_SPEED * 6;
+        overmax = PLAYER_MAX_SPEED * 8.0;
+        turbo_led_delay = 200;
+        car.turn_speed *= 3.0;
     }
-    else
-        car.turn_speed = CAR_TURN_SPEED;
+    else if (i.switches == 0xf) // Turbo 4
+    {
+        overmax = PLAYER_MAX_SPEED * 16.0;
+        turbo_led_delay = 100;
+        car.turn_speed *= 4.0;
+    }
 
     // When car moves slow, it also steers slower
     const float steer_modulation = min(1.0, PLAYER_SPEED_RATIO * 2.0);
@@ -215,14 +218,26 @@ void update_player(const inputs i) // Inlineable?
     car.speed -= FRICTION * CARS_AMOUNT;
 
     // Clamp the speed to [0, MAX]
-    car.speed = clamp(car.speed, 0.0, PLAYER_MAX_SPEED * CARS_AMOUNT + overmax);
+    car.speed = clamp(car.speed, 0.0, PLAYER_MAX_SPEED + overmax);
     distance_traveled += car.speed;
 
     // Simulate speedometer on chip leds
-    int speedometer_full = SPEEDOMETER_BASE >> (int)(8 * PLAYER_SPEED_RATIO);
-
+    float ratio = PLAYER_SPEED_RATIO;
     leds l;
-    l._all = speedometer_full & 0xFF;
+    l._all = turbo_leds;
+    if (ratio > 1.0)
+    {
+        if (TICKS - turbo_led_timer > turbo_led_delay)
+        {
+            turbo_leds = ~turbo_leds;
+            turbo_led_timer = TICKS;
+        }
+    }
+    else 
+    {
+        int speedometer_full = SPEEDOMETER_BASE >> (int)(9 * ratio);
+        l._all = speedometer_full & 0xFF;
+    }
     set_leds(l);
 }
 
