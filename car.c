@@ -1,13 +1,15 @@
 #include "helpers.h"
 
+//#define OVERFLOW_DEBUG
+
 // A pool of the npcs to be recycles when they exit the screen
 npc_car npcs[CARS_AMOUNT];
 // Player's car.. VROOM VROOM
 Car car;
 
 float distance_traveled = 0.0;
-float points = 0.0;
-// float points = INT_MAX - 1000.0;
+
+float points = 0.0f;
 
 // Constants used for generating random npc lane changing
 #define PENDING_TARGET_LANE -100000.0f
@@ -28,7 +30,7 @@ float points = 0.0;
 UBYTE turbo_leds = 0xFF;
 int turbo_led_timer = 0;
 int turbo_led_delay = 1000;
-UBYTE OVERFLOW = 0; // OVERFLOW hasn't occured
+UBYTE OVERFLOW = 0x0; // OVERFLOW hasn't occured
 
 // Inits the npcars with a random position and speed
 void init_npcs()
@@ -244,13 +246,17 @@ void update_player(const inputs i) // Inlineable?
     set_leds(l);
 
     // Calculate the points based on car speed and check of OVERFLOW
-    float add = car.speed * (1 + ratio);
-    if(points > INT_MAX-add) 
+    #ifdef OVERFLOW_DEBUG
+    points += car.speed * (1 + ratio) + 100000.0;
+    #else
+    points += car.speed * (1 + ratio);
+    #endif
+    
+    if(points > INT_MAX) 
     {
-        OVERFLOW = 1;
+        OVERFLOW = 0x1;
         points = 0.0;
     }
-    points += add;
 }
 
 // Turns (in the x direction) the car into the given velocity

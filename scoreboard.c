@@ -39,14 +39,7 @@ void display_scoreboard()
  */
 void display_points() 
 {
-    if(OVERFLOW) 
-    {
-        prints("INF", VZERO);
-    }
-    else 
-    {
-        printn(points, VZERO);
-    }
+    printn(points, VZERO);
 }
 
 /**

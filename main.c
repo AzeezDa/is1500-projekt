@@ -162,8 +162,8 @@ int main()
                     // Overflow counts as a "win"
                     add_score(name, (int) points, OVERFLOW);
                     distance_traveled = 0.0;
-                    points = 0.0;
-                    OVERFLOW = 0;
+                    points = 0.0f;
+                    OVERFLOW = 0x0;
                     reset_name();
                     GAME_STATE = SCOREBOARD;
                 }
@@ -176,20 +176,9 @@ int main()
                         continue;
                     }
                     // Reset delay
-                    button_delay = TICKS;                
-                    if(UNDERSCORE_STATE == FIRST) 
-                    {
-                        UNDERSCORE_STATE = SECOND;
-                    } 
-                    else if(UNDERSCORE_STATE == SECOND) 
-                    {
-                        UNDERSCORE_STATE = THIRD;
-                    } 
-                    else 
-                    {
-                        UNDERSCORE_STATE = FIRST;
-                    }   
-                    button_delay = TICKS; 
+                    button_delay = TICKS;  
+                    UNDERSCORE_STATE++;              
+
                 }
                 if(i.b3) 
                 {
