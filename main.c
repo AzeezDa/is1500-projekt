@@ -19,7 +19,7 @@ int main()
     // Initiate states
     GAME_STATE = MENU;
     ARROW_STATE = PLAY;
-    UNDERSCORE_STATE = FIRST;
+    UNDERSCORE_POS = UNDERSCORE_DEFAULT;
 
     // Keeping track of frame transitions
     int transition_timer;
@@ -59,7 +59,7 @@ int main()
                     if(TICKS - transition_timer <= 2500) 
                     {
                         death_transition();
-                        UNDERSCORE_STATE = FIRST;
+                        UNDERSCORE_POS = UNDERSCORE_DEFAULT;
 
                     } else {
                         GAME_STATE = DEATH;
@@ -93,7 +93,7 @@ int main()
                     GAME_STATE = SCOREBOARD;
                 }
                 // Move arrow
-                if (i.b3)
+                if (i.b3 || i.b4)
                 {
                     // Delay 
                     if((TICKS-button_delay)<BUTTON_DELAY) 
@@ -105,30 +105,13 @@ int main()
                     if(ARROW_STATE == SCORE) 
                     {
                         ARROW_STATE = PLAY;
-                    } 
+                    }
                     else 
                     {
                         ARROW_STATE = SCORE;
                     }
                 }
-                if (i.b4)
-                {
-                    // Delay 
-                    if((TICKS-button_delay)<300) 
-                    {
-                        continue;
-                    }
-                    // Reset delay
-                    button_delay = TICKS; 
-                    if(ARROW_STATE == PLAY) 
-                    {
-                        ARROW_STATE = SCORE;
-                    } 
-                    else 
-                    {
-                        ARROW_STATE = PLAY;
-                    }
-                }
+               
                 if (TICKS - menu_led_timer > LED_DELAY)
                 {
                     leds l;
@@ -161,10 +144,7 @@ int main()
                     }
                     // Overflow counts as a "win"
                     add_score(name, (int) points, OVERFLOW);
-                    distance_traveled = 0.0;
-                    points = 0.0f;
-                    OVERFLOW = 0x0;
-                    reset_name();
+                    reset_game_variables();
                     GAME_STATE = SCOREBOARD;
                 }
 
@@ -177,7 +157,8 @@ int main()
                     }
                     // Reset delay
                     button_delay = TICKS;  
-                    UNDERSCORE_STATE++;              
+                    // Switch between letters
+                    UNDERSCORE_POS = UNDERSCORE_DEFAULT + (UNDERSCORE_POS - UNDERSCORE_DEFAULT + UNDERSCORE_STEP) % (3*UNDERSCORE_STEP);            
 
                 }
                 if(i.b3) 
