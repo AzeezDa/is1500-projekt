@@ -27,7 +27,7 @@ int points = 0;
 UBYTE turbo_leds = 0xFF;
 int turbo_led_timer = 0;
 int turbo_led_delay = 1000;
-UBYTE overflow = 0; // Overflow hasn't occured
+UBYTE OVERFLOW = 0; // OVERFLOW hasn't occured
 
 // Inits the npcars with a random position and speed
 void init_npcs()
@@ -242,13 +242,14 @@ void update_player(const inputs i) // Inlineable?
     }
     set_leds(l);
 
-    // Calculate the points based on car speed and check for overflow
-    int old_points = points;
-    points += car.speed * (1 + ratio);
-    if(old_points > points) 
+    // Calculate the points based on car speed and check of OVERFLOW
+    int add = car.speed * (1 + ratio);
+    if(points > INT_MAX-add) 
     {
-        overflow = 1;
+        OVERFLOW = 1;
+        points = 0;
     }
+    points += add;
 }
 
 // Turns (in the x direction) the car into the given velocity

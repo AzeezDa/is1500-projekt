@@ -9,6 +9,7 @@ void *stdin, *stdout, *stderr;
 // GENERAL DEFINITIONS
 #define BYTE char
 #define UBYTE unsigned char
+#define INT_MAX 2147483647
 
 /*
  * This header file defines functions that should be accessible from outside
@@ -267,7 +268,7 @@ extern char name[6];
  * |                SCORE                   |
  * ==========================================
  */
-extern UBYTE overflow;
+extern UBYTE OVERFLOW;
 void display_scoreboard();
 void add_score(char *, int);
 inline void display_points();

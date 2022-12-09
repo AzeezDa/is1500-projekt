@@ -143,7 +143,9 @@ int main()
                 update_player(i);
                 update_side();
 
-                if (car.pos._1 < 4.0 || car.pos._1 > 110.0 || update_npc()) {
+                if (car.pos._1 < 4.0 || car.pos._1 > 110.0 
+                    || update_npc() || OVERFLOW) 
+                {
                     transition_timer = TICKS;
                     GAME_STATE = TRANSITION;
                 }
@@ -154,8 +156,13 @@ int main()
                 break;
             case DEATH:
                 if(i.b1) {
+                    if(OVERFLOW) {
+                        points = INT_MAX;
+                    }
                     add_score(name, points);
                     distance_traveled = 0.0;
+                    points = 0;
+                    OVERFLOW = 0;
                     reset_name();
                     GAME_STATE = SCOREBOARD;
                 }

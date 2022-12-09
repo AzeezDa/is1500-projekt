@@ -33,7 +33,7 @@ void display_scoreboard()
  */
 void display_points() 
 {
-    if(overflow) 
+    if(OVERFLOW) 
     {
         prints("INF", VZERO);
     }
