@@ -1,7 +1,7 @@
 #include "helpers.h"
 
 #define GAMEOVER_X 38.0f
-
+int UNDERSCORE_POS = UNDERSCORE_DEFAULT;
 typedef struct _underscore
 {
     UBYTE line[5];
@@ -71,7 +71,7 @@ void display_game_over()
  */
 void next_letter(int sign)
 {
-    if(UNDERSCORE_POS == FIRST) 
+    if(UNDERSCORE_POS == UNDERSCORE_DEFAULT) 
     {
         name[0] += sign;
         if(name[0] > 'Z') 
@@ -83,7 +83,7 @@ void next_letter(int sign)
             name[0] = 'Z';
         }
     } 
-    else if(UNDERSCORE_POS == SECOND) 
+    else if(UNDERSCORE_POS == UNDERSCORE_DEFAULT+UNDERSCORE_STEP) 
     {
         name[2] += sign;
         if(name[2] > 'Z') 

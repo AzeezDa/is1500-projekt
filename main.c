@@ -19,7 +19,6 @@ int main()
     // Initiate states
     GAME_STATE = MENU;
     ARROW_STATE = PLAY;
-    UNDERSCORE_POS = UNDERSCORE_DEFAULT;
 
     // Keeping track of frame transitions
     int transition_timer;
