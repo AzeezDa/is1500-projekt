@@ -259,7 +259,9 @@ extern float points;
  * |              GAME OVER                 |
  * ==========================================
  */
-enum _UNDERSCORE_STATES {FIRST=60, SECOND=72, THIRD=84} UNDERSCORE_STATE;
+#define UNDERSCORE_DEFAULT 60
+#define UNDERSCORE_STEP 12
+extern int UNDERSCORE_POS;
 void display_game_over();
 void death_transition();
 void next_letter(int);
