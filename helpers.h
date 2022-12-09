@@ -270,7 +270,7 @@ extern char name[6];
  */
 extern UBYTE OVERFLOW;
 void display_scoreboard();
-void add_score(char *, int);
+void add_score(char *, int, UBYTE);
 inline void display_points();
 
 /* ==========================================

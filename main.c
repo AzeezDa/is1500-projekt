@@ -159,7 +159,8 @@ int main()
                     if(OVERFLOW) {
                         points = INT_MAX;
                     }
-                    add_score(name, points);
+                    // Overflow counts as a "win"
+                    add_score(name, points, OVERFLOW);
                     distance_traveled = 0.0;
                     points = 0;
                     OVERFLOW = 0;

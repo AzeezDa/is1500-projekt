@@ -7,10 +7,11 @@ typedef struct _score
 {
     char name[4];
     int points;
+    UBYTE win;
 } score;
 
 // init scores to be all zero
-score scores[3] = {{{"---"}, 0}, {{"---"}, 0}, {{"---"}, 0}};
+score scores[3] = {{{"---"}, 0, 0}, {{"---"}, 0, 0}, {{"---"}, 0, 0}};
 
 /**
  * Displays the scoreboard: 3 scores, each with a name and a score
@@ -24,7 +25,12 @@ void display_scoreboard()
 
     int i;
     for(i = 0; i < 3; i++) {
-        printsn(scores[i].name, scores[i].points, pos);
+        v2 win_pos = printsn(scores[i].name, scores[i].points, pos);
+        if(scores[i].win) 
+        {
+            win_pos._1 += LETTER_WIDTH + 1;
+            prints("WINNER", win_pos);
+        }
         pos._2 += LETTER_HEIGHT+1;
     }
 }
@@ -49,7 +55,7 @@ void display_points()
  * @param name Name of the player as a 3 letter string
  * @param points Amount of points the player earned
  */
-void add_score(char *name, int points) 
+void add_score(char *name, int points, UBYTE win) 
 {
     if(points < scores[2].points) 
     {
@@ -73,6 +79,7 @@ void add_score(char *name, int points)
                 // between each letter, therefore we pick name[0], name[2], name[4]
                 scores[i].name[j] = name[j*2]; 
             }
+            scores[i].win = win;
             break;
         }
     }
