@@ -28,6 +28,13 @@ void display_scoreboard()
         pos._2 += LETTER_HEIGHT+1;
     }
 }
+/**
+ * Displays the current amount of points in-game
+ */
+void display_points() 
+{
+    printn(points, VZERO);
+}
 
 /**
  * Adds a player name and amount of points to the scoreboard 

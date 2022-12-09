@@ -49,6 +49,7 @@ int main()
                     update_road();
                     draw_side();
                     draw_road();
+                    display_points();
                     break;
                 case SCOREBOARD:
                     display_scoreboard();

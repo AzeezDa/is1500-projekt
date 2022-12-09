@@ -269,7 +269,7 @@ extern char name[6];
  */
 void display_scoreboard();
 void add_score(char *, int);
-
+inline void display_points();
 
 /* ==========================================
  * |                FONT                    |
