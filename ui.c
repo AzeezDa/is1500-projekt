@@ -26,17 +26,6 @@ void draw_arrow()
     }
 }
 
-void arrow_up()
-{
-    ARROW_STATE = PLAY;
-}
-
-void arrow_down()
-{
-    ARROW_STATE = SCORE;
-}
-
-
 /*
     FRAMES OF THE SPLASH SCREEN
 */
