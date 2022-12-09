@@ -208,7 +208,7 @@ void update_player(const inputs i) // Inlineable?
     }
 
     // Sideways steering
-    if(i.b3 || i.b4) 
+    if(i.b3^i.b4 && car.speed > 0) 
     {
         if (i.b4) {
             car.texture = &frame_car_l;
