@@ -7,6 +7,7 @@ Car car;
 
 float distance_traveled = 0.0;
 float points = 0.0;
+// float points = INT_MAX - 1000.0;
 
 // Constants used for generating random npc lane changing
 #define PENDING_TARGET_LANE -100000.0f
