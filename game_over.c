@@ -53,12 +53,11 @@ void death_transition()
  */
 void display_game_over() 
 {
-    int score = distance_traveled;
     v2 pos = {GAMEOVER_X, 0.0};
     prints("GAME OVER", pos);
     pos._1 = 0.0;
     pos._2 = LETTER_HEIGHT+3;
-    printsn("SCORE", score, pos);
+    printsn("SCORE", points, pos);
     pos._2 += LETTER_HEIGHT+3;
     pos = prints("YOUR NAME ", pos);
     prints(name, pos);

@@ -9,6 +9,7 @@ void *stdin, *stdout, *stderr;
 // GENERAL DEFINITIONS
 #define BYTE char
 #define UBYTE unsigned char
+#define INT_MAX 2147483647.0f // Is a float for comparison
 
 /*
  * This header file defines functions that should be accessible from outside
@@ -250,6 +251,7 @@ extern float road_curve;
 extern Car car;
 extern npc_car npcs[CARS_AMOUNT];
 extern float distance_traveled;
+extern float points;
 
 /* ==========================================
  * |              GAME OVER                 |
@@ -266,9 +268,10 @@ extern char name[6];
  * |                SCORE                   |
  * ==========================================
  */
+extern UBYTE OVERFLOW;
 void display_scoreboard();
-void add_score(char *, int);
-
+void add_score(char *, int, UBYTE);
+void display_points();
 
 /* ==========================================
  * |                FONT                    |

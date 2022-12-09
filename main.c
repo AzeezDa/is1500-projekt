@@ -49,6 +49,7 @@ int main()
                     update_road();
                     draw_side();
                     draw_road();
+                    display_points();
                     break;
                 case SCOREBOARD:
                     display_scoreboard();
@@ -142,7 +143,9 @@ int main()
                 update_player(i);
                 update_side();
 
-                if (car.pos._1 < 4.0 || car.pos._1 > 110.0 || update_npc()) {
+                if (car.pos._1 < 4.0 || car.pos._1 > 110.0 
+                    || update_npc() || OVERFLOW) 
+                {
                     transition_timer = TICKS;
                     GAME_STATE = TRANSITION;
                 }
@@ -153,8 +156,14 @@ int main()
                 break;
             case DEATH:
                 if(i.b1) {
-                    add_score(name, distance_traveled); // PLACEHOLDER SCORE
+                    if(OVERFLOW) {
+                        points = INT_MAX;
+                    }
+                    // Overflow counts as a "win"
+                    add_score(name, (int) points, OVERFLOW);
                     distance_traveled = 0.0;
+                    points = 0.0f;
+                    OVERFLOW = 0x0;
                     reset_name();
                     GAME_STATE = SCOREBOARD;
                 }
@@ -167,20 +176,9 @@ int main()
                         continue;
                     }
                     // Reset delay
-                    button_delay = TICKS;                
-                    if(UNDERSCORE_STATE == FIRST) 
-                    {
-                        UNDERSCORE_STATE = SECOND;
-                    } 
-                    else if(UNDERSCORE_STATE == SECOND) 
-                    {
-                        UNDERSCORE_STATE = THIRD;
-                    } 
-                    else 
-                    {
-                        UNDERSCORE_STATE = FIRST;
-                    }   
-                    button_delay = TICKS; 
+                    button_delay = TICKS;  
+                    UNDERSCORE_STATE++;              
+
                 }
                 if(i.b3) 
                 {
