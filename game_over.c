@@ -21,9 +21,9 @@ void draw_underscore()
         for (j = 0; j < LETTER_HEIGHT; j++)
         {
             if (col & 1)
-                pixon(UNDERSCORE_STATE + i, underscore.y + j);
+                pixon(UNDERSCORE_POS + i, underscore.y + j);
             else
-                pixoff(UNDERSCORE_STATE + i, underscore.y  + j);
+                pixoff(UNDERSCORE_POS + i, underscore.y  + j);
 
             col = col >> 1;
         }
@@ -71,7 +71,7 @@ void display_game_over()
  */
 void next_letter(int sign)
 {
-    if(UNDERSCORE_STATE == FIRST) 
+    if(UNDERSCORE_POS == FIRST) 
     {
         name[0] += sign;
         if(name[0] > 'Z') 
@@ -83,7 +83,7 @@ void next_letter(int sign)
             name[0] = 'Z';
         }
     } 
-    else if(UNDERSCORE_STATE == SECOND) 
+    else if(UNDERSCORE_POS == SECOND) 
     {
         name[2] += sign;
         if(name[2] > 'Z') 
@@ -109,10 +109,13 @@ void next_letter(int sign)
     }   
 }
 
-void reset_name() 
+void reset_game_variables() 
 {
     int i;
     for(i = 0; i < 3; i++) {
         name[i*2] = 'A';
     }
+    distance_traveled = 0.0;
+    points = 0.0f;
+    OVERFLOW = 0x0;
 }
