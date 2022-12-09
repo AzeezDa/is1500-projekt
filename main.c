@@ -153,7 +153,7 @@ int main()
                 break;
             case DEATH:
                 if(i.b1) {
-                    add_score(name, distance_traveled); // PLACEHOLDER SCORE
+                    add_score(name, points);
                     distance_traveled = 0.0;
                     reset_name();
                     GAME_STATE = SCOREBOARD;

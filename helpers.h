@@ -250,6 +250,7 @@ extern float road_curve;
 extern Car car;
 extern npc_car npcs[CARS_AMOUNT];
 extern float distance_traveled;
+extern int points;
 
 /* ==========================================
  * |              GAME OVER                 |

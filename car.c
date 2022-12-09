@@ -6,6 +6,7 @@ npc_car npcs[CARS_AMOUNT];
 Car car;
 
 float distance_traveled = 0.0;
+int points = 0;
 
 // Constants used for generating random npc lane changing
 #define PENDING_TARGET_LANE -100000.0f
@@ -239,6 +240,9 @@ void update_player(const inputs i) // Inlineable?
         l._all = speedometer_full & 0xFF;
     }
     set_leds(l);
+
+    // Calculate the points based on car speed 
+    points += car.speed * (1 + ratio);
 }
 
 // Turns (in the x direction) the car into the given velocity
