@@ -162,7 +162,7 @@ void init_player()
     car.pos._2 = 23;
     car.turn_speed = CAR_TURN_SPEED * CARS_AMOUNT;
     car.speed = NPC_SPEED_LOWER * CARS_AMOUNT; // Might need fine-tuning
-    car.texture = &frame_car;
+    car.texture = &frame_car_fw;
 }
 
 // Updates the player car. Includes curve inertia, steering, accelerating, braking, friction and speedometer
@@ -208,10 +208,21 @@ void update_player(const inputs i) // Inlineable?
     }
 
     // Sideways steering
-    if (i.b4)
-        turn_car(-car.turn_speed * steer_modulation);
-    if (i.b3)
-        turn_car(car.turn_speed * steer_modulation);
+    if(i.b3^i.b4 && car.speed > 0) 
+    {
+        if (i.b4) {
+            car.texture = &frame_car_l;
+            turn_car(-car.turn_speed * steer_modulation);
+        }
+        if (i.b3) {
+            car.texture = &frame_car_r;
+            turn_car(car.turn_speed * steer_modulation);
+        }
+    } 
+    else
+    {
+        car.texture = &frame_car_fw;
+    }
 
     // Forward speed
     if (i.b2)
