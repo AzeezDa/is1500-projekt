@@ -160,9 +160,9 @@ int main()
                         points = INT_MAX;
                     }
                     // Overflow counts as a "win"
-                    add_score(name, points, OVERFLOW);
+                    add_score(name, (int) points, OVERFLOW);
                     distance_traveled = 0.0;
-                    points = 0;
+                    points = 0.0;
                     OVERFLOW = 0;
                     reset_name();
                     GAME_STATE = SCOREBOARD;

@@ -6,7 +6,7 @@ npc_car npcs[CARS_AMOUNT];
 Car car;
 
 float distance_traveled = 0.0;
-int points = 0;
+float points = 0.0;
 
 // Constants used for generating random npc lane changing
 #define PENDING_TARGET_LANE -100000.0f
@@ -243,11 +243,11 @@ void update_player(const inputs i) // Inlineable?
     set_leds(l);
 
     // Calculate the points based on car speed and check of OVERFLOW
-    int add = car.speed * (1 + ratio);
+    float add = car.speed * (1 + ratio);
     if(points > INT_MAX-add) 
     {
         OVERFLOW = 1;
-        points = 0;
+        points = 0.0;
     }
     points += add;
 }
