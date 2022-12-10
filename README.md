@@ -13,8 +13,8 @@ We decided to make a game inspired by the SEGA game OutRun. It is an arcade car 
 ![image](./images/menu.jpg)
 
 ## Gameplay
-![image](./images/gameplay1.jpg)
-![image](./images/gameplay2.jpg)
+![image](./images/game1.jpg)
+![image](./images/game2.jpg)
 
 ## Death Screen & Initials Typing
 ![image](./images/death.jpg)
