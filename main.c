@@ -91,6 +91,14 @@ int main()
                 {
                     GAME_STATE = SCOREBOARD;
                 }
+                if (TICKS - menu_led_timer > LED_DELAY)
+                {
+                    leds l;
+                    l._all = (0x1 << led_counter) | (0x80 >> led_counter);
+                    set_leds(l);
+                    led_counter = (led_counter + 1) % 8;
+                    menu_led_timer = TICKS;
+                }
                 // Move arrow
                 if (i.b3 || i.b4)
                 {
@@ -109,15 +117,6 @@ int main()
                     {
                         ARROW_STATE = SCORE;
                     }
-                }
-               
-                if (TICKS - menu_led_timer > LED_DELAY)
-                {
-                    leds l;
-                    l._all = (0x1 << led_counter) | (0x80 >> led_counter);
-                    set_leds(l);
-                    led_counter = (led_counter + 1) % 8;
-                    menu_led_timer = TICKS;
                 }
                 break;
             case GAME:
