@@ -47,7 +47,7 @@ void draw_road()
     // There are X0, X1 for each value because they draw a line and each value is for line's two points
 
     v2 pos = {ROAD_WIDTH, 0.0};
-    t2 center_dx0 = calc_persp(pos);
+    v2 center_dx0 = calc_persp(pos);
 
     // Based on the distance traveled create an index that is used to mark every fourth line segment and the one after it
     int center_index0 = (int)distance_traveled % 4,
@@ -59,7 +59,7 @@ void draw_road()
     {
         // Calculate new point for current line
         pos._2 = (float)j;
-        t2 center_dx1 = calc_persp(pos);
+        v2 center_dx1 = calc_persp(pos);
 
         // Draw left and right sides of the road
         draw_line(center_dx0._1 - center_dx0._2, j - 4, 
