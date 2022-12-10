@@ -83,7 +83,7 @@ typedef union _tup2
 const v2 VZERO;
 float fabs(const float);
 float clamp(const float, const float, const float);
-t2 calc_persp(const v2);
+v2 calc_persp(const v2);
 
 /* ==========================================
  * |               PAINTER                  |
@@ -212,7 +212,7 @@ void draw(v2, const texture *);
 // Amount of total cars in on the road
 #define CARS_AMOUNT 2
 
-#define PLAYER_MAX_SPEED (0.005f * CARS_AMOUNT)
+#define PLAYER_MAX_SPEED (0.0053f * CARS_AMOUNT)
 #define PLAYER_SPEED_RATIO (car.speed / PLAYER_MAX_SPEED)
 
 // Controls how wide the perspective is

@@ -30,13 +30,13 @@ float clamp(const float x, const float lower, const float upper)
     return x;
 }
 
-t2 calc_persp(const v2 pos)
+v2 calc_persp(const v2 pos)
 {
     float persp = PERSPECTIVE_CONSTANT + pos._2 / SCREEN_Y_MAX,
               inv_persp = 1.0 - persp,
               mid = 0.5 + road_curve * inv_persp * inv_persp * inv_persp;
 
-    t2 center_dx = {mid * SCREEN_X_MAX, pos._1 * persp};
+    v2 center_dx = {mid * SCREEN_X_MAX, pos._1 * persp};
 
     return center_dx;
 }

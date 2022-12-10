@@ -3,10 +3,10 @@
 #define SCENARY_MIN_DISTANCE 200.0f
 #define SCENARY_MAX_DISTANCE 400.0f
 #define OBJECT_AMOUNT_MAX 8
-#define FOREST_X_POS_MIN 60.0f
-#define FOREST_X_POS_MAX 100.0f
-#define DONKEN_X_POS_MIN 80.0f
-#define DONKEN_X_POS_MAX 100.0f
+#define FOREST_X_POS_MIN 55.0f
+#define FOREST_X_POS_MAX 80.0f
+#define DONKEN_X_POS_MIN 55.0f
+#define DONKEN_X_POS_MAX 80.0f
 #define FOREST_SPAWN -40.0f
 #define DONKEN_SPAWN -100.0f
 
@@ -35,7 +35,10 @@ void init_scenary()
     for (i = 0; i < OBJECT_AMOUNT_MAX; i++)
     {
         object_positions[i]._2 = UFRAND * SCREEN_Y_MAX;
-        object_positions[i]._1 = FOREST_X_POS_MIN + UFRAND * (FOREST_X_POS_MAX - FOREST_X_POS_MIN);
+        if (is_forest)
+            object_positions[i]._1 = FOREST_X_POS_MIN + UFRAND * (FOREST_X_POS_MAX - FOREST_X_POS_MIN);
+        else
+            object_positions[i]._1 = DONKEN_X_POS_MIN + UFRAND * (DONKEN_X_POS_MAX - DONKEN_X_POS_MIN);
 
         // Randomly choose side for the item
         if (rand() % 2)
@@ -64,7 +67,7 @@ void update_side()
             continue;
         }
 
-        if (object_positions[i]._2 > SCREEN_Y_MAX + 2.0)
+        if (object_positions[i]._2 > SCREEN_Y_MAX + 10.0)
         {
             if (is_forest)
                 object_positions[i]._2 = UFRAND * FOREST_SPAWN;
@@ -98,7 +101,7 @@ void draw_side()
     {
         v2 pos = {ROAD_WIDTH + 10, lamp_y + lamp_difference * i};
 
-        t2 center_dx = calc_persp(pos);
+        v2 center_dx = calc_persp(pos);
 
         v2 position = {center_dx._1 + center_dx._2, pos._2};
         int texture_index = 0;
@@ -117,7 +120,7 @@ void draw_side()
     int max_objects = is_forest ? OBJECT_AMOUNT_MAX : OBJECT_AMOUNT_MAX / 2;
     for (i = 0; i < max_objects; i++)
     {
-        t2 center_dx = calc_persp(object_positions[i]);
+        v2 center_dx = calc_persp(object_positions[i]);
 
         texture *texture = &tree_f1;
         if (is_forest)
@@ -135,7 +138,8 @@ void draw_side()
                 texture = &building_2;
         }
 
-        v2 position = {center_dx._1 + center_dx._2, object_positions[i]._2};
+        // - width/2 and - height are used to realign the texture origin to be drawn more "nicely"
+        v2 position = {center_dx._1 + center_dx._2 - texture->width / 2.0f, object_positions[i]._2 - texture->height};
         draw(position, texture);
     }
 }

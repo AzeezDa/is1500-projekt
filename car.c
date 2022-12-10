@@ -16,9 +16,9 @@ float points = 0.0f;
 #define NO_TARGET_LANE -200000.0f
 
 // Tuneable constants
-#define ACCELERATION 0.000001f
+#define ACCELERATION 0.0000012f
 #define FRICTION 0.0000004f
-#define CAR_TURN_SPEED 0.009f
+#define CAR_TURN_SPEED 0.0095f
 #define NPC_SPEED_LOWER 0.0005f // Also initial speed of player's car
 #define NPC_SPEED_UPPER 0.001f
 #define NPC_LANE_SWITCH_RATIO 5 // 1/5 npcs change lanes
@@ -80,7 +80,7 @@ UBYTE update_npc()
 
         // Deviation from center
         float dx = npcs[i].lane * persp;
-        npcs[i].pos._1 = center + dx;
+        npcs[i].pos._1 = center + dx - npcs[i].texture->width / 2.0; // - width/2 to align texture origin to middle
 
         // Lane changing of NPCars
         if (6.0 * UFRAND < npcs[i].pos._2 && npcs[i].pos._2 < 10.0 + 6.0 * UFRAND && npcs[i].target_lane == PENDING_TARGET_LANE) // If within [0, 10] and still able to change lane, try to change lane
